@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 
 /**
- * ResponseMessage 클래스는 api 응답 형식입니다.
+ * 이 클래스는 api 응답 형식이고, Controller에서 ResponseEntity 객체안에 담깁니다.
  * 아래는 형식의 예시 입니다.
  *
  * {
