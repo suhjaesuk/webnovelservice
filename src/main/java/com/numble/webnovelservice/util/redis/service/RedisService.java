@@ -13,17 +13,17 @@ public class RedisService {
 
     private final RedisTemplate redisTemplate;
 
-    public void setValues(String email, String refreshToken, Duration duration){
+    public void setValues(String title, String type, Duration duration){
         ValueOperations<String, String> values = redisTemplate.opsForValue();
-        values.set(email, refreshToken, duration);
+        values.set(title, type, duration);
     }
 
-    public String getValues(String email){
+    public String getValues(String title){
         ValueOperations<String, String> values = redisTemplate.opsForValue();
-        return values.get(email);
+        return values.get(title);
     }
 
-    public void delValues(String email){
-        redisTemplate.delete(email);
+    public void delValues(String title){
+        redisTemplate.delete(title);
     }
 }
