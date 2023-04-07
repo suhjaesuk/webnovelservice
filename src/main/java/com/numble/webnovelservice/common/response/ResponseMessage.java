@@ -8,7 +8,7 @@ import lombok.Getter;
  * 아래는 형식의 예시 입니다.
  *
  * {
- * "message" :"message",
+ * "message" :"소설 조회 성공",
  * "data" :
  *    {
  *    "novelId" : 1,
