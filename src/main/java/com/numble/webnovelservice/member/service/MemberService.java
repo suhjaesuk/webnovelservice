@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 
+import static com.numble.webnovelservice.common.exception.ErrorCode.ALREADY_EXIST_USERNAME;
 import static com.numble.webnovelservice.common.exception.ErrorCode.NOT_FOUND_MEMBER;
 import static com.numble.webnovelservice.common.exception.ErrorCode.NOT_VALID_PASSWORD;
 import static com.numble.webnovelservice.util.jwt.JwtUtil.AUTHORIZATION_ACCESS;
@@ -27,6 +28,10 @@ public class MemberService {
 
     @Transactional
     public void signUp(MemberSignUpRequest request) {
+
+        if (memberRepository.existsByUsername(request.getUsername())) {
+            throw new WebNovelServiceException(ALREADY_EXIST_USERNAME);
+        }
 
         String encryptedPassword = passwordEncoder.encode(request.getPassword());
         Member member = request.toMember(encryptedPassword);
@@ -45,8 +50,7 @@ public class MemberService {
         issueTokens(response, member.getUsername());
     }
 
-    @Transactional
-    public void issueTokens(HttpServletResponse response, String email){
+    public void issueTokens(HttpServletResponse response, String email) {
 
         String accessToken = jwtUtil.createAccessToken(email);
         response.addHeader(AUTHORIZATION_ACCESS, accessToken);
@@ -54,7 +58,7 @@ public class MemberService {
 
     public void validatePasswordMatch(String encryptedPassword, String inputPassword) {
 
-        if (passwordEncoder.matches(inputPassword, encryptedPassword)) {
+        if (passwordEncoder.matches(encryptedPassword, inputPassword)) {
             return;
         }
         throw new WebNovelServiceException(NOT_VALID_PASSWORD);
