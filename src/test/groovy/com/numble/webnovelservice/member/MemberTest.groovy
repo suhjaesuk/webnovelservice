@@ -24,7 +24,7 @@ class MemberTest extends Specification {
     def "Member 생성 시 정상케이스"() {
 
         given:
-        def username = "testUser"
+        def username = "testUsername"
         def password = "testPassword"
         def nickname = "testNickname"
         def profileImage = "testProfileImage"
