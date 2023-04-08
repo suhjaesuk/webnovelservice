@@ -2,6 +2,7 @@ package com.numble.webnovelservice.member.service;
 
 import com.numble.webnovelservice.member.dto.request.MemberLoginRequest;
 import com.numble.webnovelservice.member.dto.request.MemberSignUpRequest;
+import com.numble.webnovelservice.member.entity.Member;
 import com.numble.webnovelservice.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,10 +21,9 @@ public class MemberService {
     @Transactional
     public void signUp(MemberSignUpRequest request) {
 
-        /*
-        1. 회원 가입 시 DB에 회원 저장
-        2. 비밀번호 암호화
-        */
+        String password = passwordEncoder.encode(request.getPassword());
+        Member member = request.toMember(password);
+        memberRepository.save(member);
     }
 
     @Transactional
