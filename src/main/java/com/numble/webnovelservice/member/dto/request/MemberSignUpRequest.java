@@ -23,4 +23,17 @@ public class MemberSignUpRequest {
                 .ticketCount(0)
                 .build();
     }
+
+    //테스트를 위한 set() 메서드
+    public void setUsernameForTest(String username) {
+        this.username = username;
+    }
+
+    public void setNicknameForTest(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void setPasswordForTest(String password){
+        this.password = password;
+    }
 }
