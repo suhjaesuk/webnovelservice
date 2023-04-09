@@ -3,6 +3,8 @@ package com.numble.webnovelservice.member.service;
 import com.numble.webnovelservice.common.exception.WebNovelServiceException;
 import com.numble.webnovelservice.member.dto.request.MemberLoginRequest;
 import com.numble.webnovelservice.member.dto.request.MemberSignUpRequest;
+import com.numble.webnovelservice.member.dto.request.MemberUpdateNicknameRequest;
+import com.numble.webnovelservice.member.dto.request.MemberUpdateProfileImageRequest;
 import com.numble.webnovelservice.member.entity.Member;
 import com.numble.webnovelservice.member.repository.MemberRepository;
 import com.numble.webnovelservice.util.jwt.JwtUtil;
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 
+import static com.numble.webnovelservice.common.exception.ErrorCode.ALREADY_EXIST_NICKNAME;
 import static com.numble.webnovelservice.common.exception.ErrorCode.ALREADY_EXIST_USERNAME;
 import static com.numble.webnovelservice.common.exception.ErrorCode.NOT_FOUND_MEMBER;
 import static com.numble.webnovelservice.common.exception.ErrorCode.NOT_VALID_PASSWORD;
@@ -32,6 +35,8 @@ public class MemberService {
         if (memberRepository.existsByUsername(request.getUsername())) {
             throw new WebNovelServiceException(ALREADY_EXIST_USERNAME);
         }
+
+        validateDuplicateNickname(request.getNickname());
 
         String encryptedPassword = passwordEncoder.encode(request.getPassword());
         Member member = request.toMember(encryptedPassword);
@@ -63,4 +68,36 @@ public class MemberService {
         }
         throw new WebNovelServiceException(NOT_VALID_PASSWORD);
     }
+
+    @Transactional
+    public void updateNickname(Member member, MemberUpdateNicknameRequest request){
+
+        validateDuplicateNickname(request.getNickname());
+
+        Member findMember = findMemberById(member.getId());
+
+        findMember.updateNickname(request.getNickname());
+    }
+
+    @Transactional
+    public void updateProfileImage(Member member, MemberUpdateProfileImageRequest request){
+
+        Member findMember = findMemberById(member.getId());
+
+        findMember.updateProfileImage(request.getProfileImage());
+    }
+
+    public Member findMemberById(Long memberId) {
+
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new WebNovelServiceException(NOT_FOUND_MEMBER));
+    }
+
+    public void validateDuplicateNickname(String nickname){
+
+        if (memberRepository.existsByNickname(nickname)) {
+            throw new WebNovelServiceException(ALREADY_EXIST_NICKNAME);
+        }
+    }
+
 }
