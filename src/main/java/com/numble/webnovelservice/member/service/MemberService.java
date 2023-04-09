@@ -50,9 +50,9 @@ public class MemberService {
         issueTokens(response, member.getUsername());
     }
 
-    public void issueTokens(HttpServletResponse response, String email) {
+    public void issueTokens(HttpServletResponse response, String username) {
 
-        String accessToken = jwtUtil.createAccessToken(email);
+        String accessToken = jwtUtil.createAccessToken(username);
         response.addHeader(AUTHORIZATION_ACCESS, accessToken);
     }
 
