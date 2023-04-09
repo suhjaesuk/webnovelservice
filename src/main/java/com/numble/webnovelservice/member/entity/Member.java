@@ -50,4 +50,13 @@ public class Member extends Timestamped{
         this.pointAmount = pointAmount;
         this.ticketCount = ticketCount;
     }
+
+    public void updateNickname(String nickname){
+        this.nickname = nickname;
+    }
+
+    public void updateProfileImage(String profileImage){
+        this.profileImage = profileImage;
+    }
+
 }
