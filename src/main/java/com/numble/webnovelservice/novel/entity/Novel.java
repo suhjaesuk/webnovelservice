@@ -49,11 +49,14 @@ public class Novel extends Timestamped {
     @Column(nullable = false)
     private Integer totalViewCount;
 
+    @Column(nullable = false)
+    private Integer likeCount;
+
     @Column
     private LocalDateTime updatedAt;
 
     @Builder
-    public Novel(Long id, String title, String description, String author, Genre genre, String coverImage, SerializedStatus serializedStatus, Integer totalViewCount, LocalDateTime updatedAt) {
+    public Novel(Long id, String title, String description, String author, Genre genre, String coverImage, SerializedStatus serializedStatus, Integer totalViewCount, Integer likeCount, LocalDateTime updatedAt) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -62,6 +65,7 @@ public class Novel extends Timestamped {
         this.coverImage = coverImage;
         this.serializedStatus = serializedStatus;
         this.totalViewCount = totalViewCount;
+        this.likeCount = likeCount;
         this.updatedAt = updatedAt;
     }
 
@@ -72,5 +76,4 @@ public class Novel extends Timestamped {
         this.coverImage = request.getCoverImage();
         this.serializedStatus = serializedStatusEnum;
     }
-
 }
