@@ -19,9 +19,9 @@ public enum Genre {
 
     private final String koreanName;
 
-    public static Genre fromKoreanName(String genre) {
+    public static Genre fromKoreanName(String koreanName) {
 
-        return switch (genre) {
+        return switch (koreanName) {
             case "코미디" -> COMEDY;
             case "드라마" -> DRAMA;
             case "판타지" -> FANTASY;
