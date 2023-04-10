@@ -4,6 +4,7 @@ import com.numble.webnovelservice.common.exception.WebNovelServiceException;
 import com.numble.webnovelservice.novel.dto.request.NovelRegisterRequest;
 import com.numble.webnovelservice.novel.dto.request.NovelUpdateInfoRequest;
 import com.numble.webnovelservice.novel.dto.response.NovelInfoResponseList;
+import com.numble.webnovelservice.novel.entity.Genre;
 import com.numble.webnovelservice.novel.entity.Novel;
 import com.numble.webnovelservice.novel.repository.NovelRepository;
 import lombok.RequiredArgsConstructor;
@@ -50,9 +51,20 @@ public class NovelService {
                 () -> new WebNovelServiceException(NOT_FOUND_NOVEL));
     }
 
+    @Transactional(readOnly = true)
     public NovelInfoResponseList retrieveAllNovels() {
 
         List<Novel> novels = novelRepository.findAll();
+
+        return NovelInfoResponseList.toResponseList(novels);
+    }
+
+    @Transactional
+    public NovelInfoResponseList retrieveNovelsByGenre(String koreanGenre) {
+
+        Genre genre = Genre.fromKoreanName(koreanGenre);
+
+        List<Novel> novels = novelRepository.findByGenre(genre);
 
         return NovelInfoResponseList.toResponseList(novels);
     }
