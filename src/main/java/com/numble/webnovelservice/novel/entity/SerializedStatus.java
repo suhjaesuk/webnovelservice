@@ -26,4 +26,13 @@ public enum SerializedStatus {
             default -> throw new WebNovelServiceException(NOT_VALID_SERIALIZED_STATUS);
         };
     }
+
+    public static String toKoreanName(SerializedStatus serializedStatus) {
+
+        return switch (serializedStatus) {
+            case SERIALIZING -> SERIALIZING.getKoreanName();
+            case PAUSED -> PAUSED.getKoreanName();
+            case FINISHED -> FINISHED.getKoreanName();
+        };
+    }
 }
