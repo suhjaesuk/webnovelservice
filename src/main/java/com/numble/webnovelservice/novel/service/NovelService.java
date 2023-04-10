@@ -21,17 +21,29 @@ public class NovelService {
     public void registerNovel(NovelRegisterRequest request){
 
         Novel novel = request.toNovel();
+
         novelRepository.save(novel);
     }
 
     @Transactional
     public void updateNovelInfo(Long novelId, NovelUpdateInfoRequest request){
 
-        Novel novel = novelRepository.findById(novelId).orElseThrow(
-                () -> new WebNovelServiceException(NOT_FOUND_NOVEL));
+        Novel novel = findNovelById(novelId);
 
         novel.updateInfo(request);
     }
 
+    @Transactional
+    public void deleteNovel(Long novelId){
 
+        Novel novel = findNovelById(novelId);
+
+        novelRepository.delete(novel);
+    }
+
+    private Novel findNovelById(Long novelId) {
+
+        return novelRepository.findById(novelId).orElseThrow(
+                () -> new WebNovelServiceException(NOT_FOUND_NOVEL));
+    }
 }

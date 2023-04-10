@@ -21,6 +21,7 @@ public class NovelRegisterRequest {
     private String coverImage;
 
     public Novel toNovel(){
+
         Genre genreEnum = Genre.fromKoreanName(genre);
         SerializedStatus serializedStatusEnum = SerializedStatus.fromKoreanName(serializedStatus);
 
@@ -32,6 +33,7 @@ public class NovelRegisterRequest {
                 .serializedStatus(serializedStatusEnum)
                 .coverImage(coverImage)
                 .totalViewCount(0)
+                .likeCount(0)
                 .build();
     }
 }
