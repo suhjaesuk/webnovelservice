@@ -9,4 +9,8 @@ import java.util.List;
 public interface NovelRepository extends JpaRepository<Novel, Long> {
 
     List<Novel> findByGenre(Genre genre);
+
+    List<Novel> findByTitleContainingOrAuthorContaining(String title, String author);
+
+    List<Novel> findByOrderByUpdatedAtDesc();
 }
