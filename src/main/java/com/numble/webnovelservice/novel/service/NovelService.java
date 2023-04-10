@@ -3,11 +3,14 @@ package com.numble.webnovelservice.novel.service;
 import com.numble.webnovelservice.common.exception.WebNovelServiceException;
 import com.numble.webnovelservice.novel.dto.request.NovelRegisterRequest;
 import com.numble.webnovelservice.novel.dto.request.NovelUpdateInfoRequest;
+import com.numble.webnovelservice.novel.dto.response.NovelInfoResponseList;
 import com.numble.webnovelservice.novel.entity.Novel;
 import com.numble.webnovelservice.novel.repository.NovelRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static com.numble.webnovelservice.common.exception.ErrorCode.NOT_FOUND_NOVEL;
 
@@ -45,5 +48,12 @@ public class NovelService {
 
         return novelRepository.findById(novelId).orElseThrow(
                 () -> new WebNovelServiceException(NOT_FOUND_NOVEL));
+    }
+
+    public NovelInfoResponseList retrieveAllNovels() {
+
+        List<Novel> novels = novelRepository.findAll();
+
+        return NovelInfoResponseList.toResponseList(novels);
     }
 }
