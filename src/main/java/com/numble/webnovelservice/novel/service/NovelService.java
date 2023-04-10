@@ -68,4 +68,18 @@ public class NovelService {
 
         return NovelInfoResponseList.toResponseList(novels);
     }
+
+    public NovelInfoResponseList retrieveNovelsBySearch(String titleOrAuthor) {
+
+        List<Novel> novels = novelRepository.findByTitleContainingOrAuthorContaining(titleOrAuthor, titleOrAuthor);
+
+        return NovelInfoResponseList.toResponseList(novels);
+    }
+
+    public NovelInfoResponseList retrieveLatestUpdateNovels() {
+
+        List<Novel> novels = novelRepository.findByOrderByUpdatedAtDesc();
+
+        return NovelInfoResponseList.toResponseList(novels);
+    }
 }

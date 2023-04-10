@@ -58,4 +58,18 @@ public class NovelController {
         NovelInfoResponseList response = novelService.retrieveNovelsByGenre(genre);
         return new ResponseEntity<>(new ResponseMessage<>("장르별 소설 조회 성공", response), HttpStatus.OK);
     }
+
+    @GetMapping("/search/{titleOrAuthor}")
+    public ResponseEntity<ResponseMessage<NovelInfoResponseList>> retrieveNovelsBySearch(@PathVariable String titleOrAuthor){
+
+        NovelInfoResponseList response = novelService.retrieveNovelsBySearch(titleOrAuthor);
+        return new ResponseEntity<>(new ResponseMessage<>("소설 검색 성공", response), HttpStatus.OK);
+    }
+
+    @GetMapping("/latest}")
+    public ResponseEntity<ResponseMessage<NovelInfoResponseList>> retrieveLatestUpdateNovels(){
+
+        NovelInfoResponseList response = novelService.retrieveLatestUpdateNovels();
+        return new ResponseEntity<>(new ResponseMessage<>("최신 업데이트 소설 조회 성공", response), HttpStatus.OK);
+    }
 }
