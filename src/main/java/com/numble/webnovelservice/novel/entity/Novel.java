@@ -1,5 +1,6 @@
 package com.numble.webnovelservice.novel.entity;
 
+import com.numble.webnovelservice.novel.dto.request.NovelUpdateInfoRequest;
 import com.numble.webnovelservice.util.time.Timestamped;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -63,4 +64,13 @@ public class Novel extends Timestamped {
         this.totalViewCount = totalViewCount;
         this.updatedAt = updatedAt;
     }
+
+    public void updateInfo(NovelUpdateInfoRequest request){
+        SerializedStatus serializedStatusEnum = SerializedStatus.fromKoreanName(request.getSerializedStatus());
+
+        this.description = request.getDescription();
+        this.coverImage = request.getCoverImage();
+        this.serializedStatus = serializedStatusEnum;
+    }
+
 }
