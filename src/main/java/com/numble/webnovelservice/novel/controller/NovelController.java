@@ -3,11 +3,13 @@ package com.numble.webnovelservice.novel.controller;
 import com.numble.webnovelservice.common.response.ResponseMessage;
 import com.numble.webnovelservice.novel.dto.request.NovelRegisterRequest;
 import com.numble.webnovelservice.novel.dto.request.NovelUpdateInfoRequest;
+import com.numble.webnovelservice.novel.dto.response.NovelInfoResponseList;
 import com.numble.webnovelservice.novel.service.NovelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -41,5 +43,12 @@ public class NovelController {
 
         novelService.deleteNovel(novelId);
         return new ResponseEntity<>(new ResponseMessage<>("소설 삭제 성공",null), HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<ResponseMessage<NovelInfoResponseList>> retrieveAllNovels(){
+
+        NovelInfoResponseList response = novelService.retrieveAllNovels();
+        return new ResponseEntity<>(new ResponseMessage<>("소설 전체 조회 성공", response), HttpStatus.OK);
     }
 }
