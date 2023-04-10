@@ -6,4 +6,8 @@ import lombok.Getter;
 public class MemberUpdateProfileImageRequest {
 
     private String profileImage;
+
+    public void setProfileImageForTest(String profileImage) {
+        this.profileImage = profileImage;
+    }
 }

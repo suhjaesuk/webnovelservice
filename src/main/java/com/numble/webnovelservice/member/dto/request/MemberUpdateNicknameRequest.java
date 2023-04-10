@@ -6,4 +6,8 @@ import lombok.Getter;
 public class MemberUpdateNicknameRequest {
 
     private String nickname;
+
+    public void setNicknameForTest(String nickname) {
+        this.nickname = nickname;
+    }
 }

@@ -47,6 +47,6 @@ public class MemberController {
     @PutMapping("/members/profile-image")
     public ResponseEntity<ResponseMessage<Void>> updateProfileImage(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody MemberUpdateProfileImageRequest request){
         memberService.updateProfileImage(userDetails.getMember(), request);
-        return new ResponseEntity<>(new ResponseMessage<>("닉네임 변경 성공",null), HttpStatus.OK);
+        return new ResponseEntity<>(new ResponseMessage<>("프로필 이미지 변경 성공",null), HttpStatus.OK);
     }
 }
