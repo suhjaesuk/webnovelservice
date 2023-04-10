@@ -57,6 +57,7 @@ public class Novel extends Timestamped {
 
     @Builder
     public Novel(Long id, String title, String description, String author, Genre genre, String coverImage, SerializedStatus serializedStatus, Integer totalViewCount, Integer likeCount, LocalDateTime updatedAt) {
+
         this.id = id;
         this.title = title;
         this.description = description;
@@ -70,6 +71,7 @@ public class Novel extends Timestamped {
     }
 
     public void updateInfo(NovelUpdateInfoRequest request){
+
         SerializedStatus serializedStatusEnum = SerializedStatus.fromKoreanName(request.getSerializedStatus());
 
         this.description = request.getDescription();

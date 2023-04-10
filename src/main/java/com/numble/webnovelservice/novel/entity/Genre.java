@@ -30,4 +30,15 @@ public enum Genre {
             default -> throw new WebNovelServiceException(NOT_VALID_GENRE);
         };
     }
+
+    public static String toKoreanName(Genre genre) {
+
+        return switch (genre) {
+            case COMEDY -> COMEDY.getKoreanName();
+            case DRAMA -> DRAMA.getKoreanName();
+            case FANTASY -> FANTASY.getKoreanName();
+            case ROMANCE -> ROMANCE.getKoreanName();
+            case SCIENCE_FICTION -> SCIENCE_FICTION.getKoreanName();
+        };
+    }
 }
