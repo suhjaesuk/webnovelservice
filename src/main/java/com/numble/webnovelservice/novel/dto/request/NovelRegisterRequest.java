@@ -36,4 +36,28 @@ public class NovelRegisterRequest {
                 .likeCount(0)
                 .build();
     }
+
+    public void setTitleForTest(String title) {
+        this.title = title;
+    }
+
+    public void setDescriptionForTest(String description) {
+        this.description = description;
+    }
+
+    public void setAuthorForTest(String author) {
+        this.author = author;
+    }
+
+    public void setGenreForTest(String genre) {
+        this.genre = genre;
+    }
+
+    public void setSerializedStatusForTest(String serializedStatus) {
+        this.serializedStatus = serializedStatus;
+    }
+
+    public void setCoverImageForTest(String coverImage) {
+        this.coverImage = coverImage;
+    }
 }
