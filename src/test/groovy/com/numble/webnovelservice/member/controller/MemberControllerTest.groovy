@@ -1,7 +1,6 @@
 package com.numble.webnovelservice.member.controller
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.jayway.jsonpath.JsonPath
 import com.numble.webnovelservice.member.dto.request.MemberLoginRequest
 import com.numble.webnovelservice.member.dto.request.MemberSignUpRequest
 import com.numble.webnovelservice.member.dto.request.MemberUpdateNicknameRequest
@@ -11,8 +10,8 @@ import com.numble.webnovelservice.util.security.UserDetailsImpl
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.web.client.TestRestTemplate
-import org.springframework.http.*
+import org.springframework.http.HttpHeaders
+import org.springframework.http.MediaType
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors
 import org.springframework.test.web.servlet.MockMvc
@@ -20,12 +19,15 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import spock.lang.Specification
 
+/**
+ * 테스트 시 DB 초기화가 필요합니다.
+ */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 class MemberControllerTest extends Specification {
 
     @Autowired
-    TestRestTemplate restTemplate;
+    MockMvc mockMvc
 
     static ObjectMapper objectMapper;
 
@@ -45,17 +47,14 @@ class MemberControllerTest extends Specification {
         request.setNicknameForTest(nickname)
         request.setPasswordForTest(password)
 
-        def body = objectMapper.writeValueAsString(request)
-
         when:
-        def httpEntity = new HttpEntity(body, httpHeaders)
-        def responseEntity = restTemplate.exchange("/api/auth/sign-up", HttpMethod.POST, httpEntity, String.class)
+        def response = mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/sign-up")
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(objectMapper.writeValueAsString(request)))
 
         then:
-        responseEntity.statusCode == HttpStatus.CREATED
-        def documentContext = JsonPath.parse(responseEntity.getBody())
-
-        documentContext.read('$.message') == "회원가입 성공"
+        response.andExpect(MockMvcResultMatchers.status().isCreated())
+        response.andExpect(MockMvcResultMatchers.jsonPath('$.message').value("회원가입 성공"))
     }
 
     def "로그인 정상 케이스"() {
@@ -70,40 +69,35 @@ class MemberControllerTest extends Specification {
         request.setUsernameForTest(username)
         request.setPasswordForTest(password)
 
-        def body = objectMapper.writeValueAsString(request)
-
         when:
-        def httpEntity = new HttpEntity(body, httpHeaders)
-        def responseEntity = restTemplate.exchange("/api/auth/login", HttpMethod.POST, httpEntity, String.class)
+        def response = mockMvc.perform(MockMvcRequestBuilders.post("/api/auth/login")
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(objectMapper.writeValueAsString(request)))
 
         then:
-        responseEntity.statusCode == HttpStatus.OK
-        def documentContext = JsonPath.parse(responseEntity.getBody())
-
-        documentContext.read('$.message') == "로그인 성공"
+        response.andExpect(MockMvcResultMatchers.status().isOk())
+        response.andExpect(MockMvcResultMatchers.jsonPath('$.message').value("로그인 성공"))
     }
-    @Autowired
-    MockMvc mockMvc
 
-    @WithMockUser(username="testUsername")
+    @WithMockUser
     def "닉네임 변경 정상 케이스"() {
 
         given:
         objectMapper = new ObjectMapper()
         httpHeaders = new HttpHeaders()
         httpHeaders.setContentType(MediaType.APPLICATION_JSON)
+
         def username = "testUsername"
-        def nickname = "testNickname1"
+        def nickname = "changeTestNickname"
 
         def request = new MemberUpdateNicknameRequest()
         request.setNicknameForTest(nickname)
 
         def member = Member.builder()
-                        .id(10L)
+                        .id(1L)
                         .username(username)
                         .nickname(nickname)
                         .build()
-
 
         def userDetails = new UserDetailsImpl(member, username)
 
@@ -118,7 +112,7 @@ class MemberControllerTest extends Specification {
         response.andExpect(MockMvcResultMatchers.jsonPath('$.message').value("닉네임 변경 성공"))
     }
 
-    @WithMockUser(username="testUsername")
+    @WithMockUser
     def "프로필 이미지 정상 케이스"() {
 
         given:
@@ -132,11 +126,10 @@ class MemberControllerTest extends Specification {
         request.setProfileImageForTest(profileImage)
 
         def member = Member.builder()
-                .id(10L)
+                .id(1L)
                 .username(username)
                 .profileImage(profileImage)
                 .build()
-
 
         def userDetails = new UserDetailsImpl(member, username)
 

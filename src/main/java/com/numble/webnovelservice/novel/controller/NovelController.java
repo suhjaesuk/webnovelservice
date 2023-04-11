@@ -39,7 +39,7 @@ public class NovelController {
     }
 
     @DeleteMapping("/{novelId}")
-    public ResponseEntity<ResponseMessage<Void>> updateNovelInfo(@PathVariable Long novelId){
+    public ResponseEntity<ResponseMessage<Void>> deleteNovel(@PathVariable Long novelId){
 
         novelService.deleteNovel(novelId);
         return new ResponseEntity<>(new ResponseMessage<>("소설 삭제 성공",null), HttpStatus.OK);
@@ -66,7 +66,7 @@ public class NovelController {
         return new ResponseEntity<>(new ResponseMessage<>("소설 검색 성공", response), HttpStatus.OK);
     }
 
-    @GetMapping("/latest}")
+    @GetMapping("/latest")
     public ResponseEntity<ResponseMessage<NovelInfoResponseList>> retrieveLatestUpdateNovels(){
 
         NovelInfoResponseList response = novelService.retrieveLatestUpdateNovels();
