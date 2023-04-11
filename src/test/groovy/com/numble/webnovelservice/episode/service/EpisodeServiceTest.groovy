@@ -51,6 +51,45 @@ class EpisodeServiceTest extends Specification{
         1* episodeRepository.save(_)
     }
 
+    def "에피소드 등록 시 소설을 못찾을 경우 예외를 반환한다"(){
+
+        given:
+        def episodeRepository = Mock(EpisodeRepository.class)
+        def novelRepository = Mock(NovelRepository.class)
+        def episodeService = new EpisodeService(episodeRepository, novelRepository)
+
+        def title = "testTitle"
+        def content = "testContent"
+        def totalPageCount = 0
+        def neededTicketCount = 0
+        def fileSize = 0.0
+
+        EpisodeRegisterRequest request = new EpisodeRegisterRequest()
+        request.setTitleForTest(title)
+        request.setContentForTest(content)
+        request.setTotalPageCountForTest(totalPageCount)
+        request.setNeededTicketCountForTest(neededTicketCount)
+        request.setFileSizeForTest(fileSize)
+
+        def novelId = 1L
+
+        Novel novel = Novel.builder()
+                .id(novelId)
+                .updatedAt(null)
+                .build()
+
+        Episode episode = request.toEpisode(novel)
+
+        //stub
+        novelRepository.findById(novelId) >> null
+
+        when:
+        episodeService.registerEpisode(novelId, request)
+
+        then:
+        thrown(NullPointerException)
+    }
+
     def "에피소드 수정 시 정상 케이스"(){
 
         given:
@@ -105,6 +144,77 @@ class EpisodeServiceTest extends Specification{
         findEpisode.getFileSize() == fileSize
     }
 
+    def "에피소드 수정 시 소설을 못찾을 경우 예외를 반환한다"(){
+
+        given:
+        def episodeRepository = Mock(EpisodeRepository.class)
+        def novelRepository = Mock(NovelRepository.class)
+        def episodeService = new EpisodeService(episodeRepository, novelRepository)
+
+        def episodeId = 1L
+        def title = "testTitle"
+        def content = "testContent"
+        def totalPageCount = 0
+        def neededTicketCount = 0
+        def fileSize = 0.0
+
+        EpisodeUpdateRequest request = new EpisodeUpdateRequest()
+        request.setTitleForTest(title)
+        request.setContentForTest(content)
+        request.setTotalPageCountForTest(totalPageCount)
+        request.setNeededTicketCountForTest(neededTicketCount)
+        request.setFileSizeForTest(fileSize)
+
+        def novelId = 1L
+
+        //stub
+        novelRepository.findById(novelId) >> null
+
+        when:
+        episodeService.updateEpisode(novelId, episodeId, request)
+
+        then:
+        thrown(NullPointerException)
+    }
+
+    def "에피소드 수정 시 에피소드를 못찾을 경우 예외를 반환한다"(){
+
+        given:
+        def episodeRepository = Mock(EpisodeRepository.class)
+        def novelRepository = Mock(NovelRepository.class)
+        def episodeService = new EpisodeService(episodeRepository, novelRepository)
+
+        def episodeId = 1L
+        def title = "testTitle"
+        def content = "testContent"
+        def totalPageCount = 0
+        def neededTicketCount = 0
+        def fileSize = 0.0
+
+        EpisodeUpdateRequest request = new EpisodeUpdateRequest()
+        request.setTitleForTest(title)
+        request.setContentForTest(content)
+        request.setTotalPageCountForTest(totalPageCount)
+        request.setNeededTicketCountForTest(neededTicketCount)
+        request.setFileSizeForTest(fileSize)
+
+        def novelId = 1L
+
+        Novel novel = Novel.builder()
+                .id(novelId)
+                .build()
+
+        //stub
+        novelRepository.findById(novelId) >> Optional.of(novel)
+        episodeRepository.findById(episodeId) >> null
+
+        when:
+        episodeService.updateEpisode(novelId, episodeId, request)
+
+        then:
+        thrown(NullPointerException)
+    }
+
     def "에피소드 삭제 시 정상 케이스"(){
 
         given:
@@ -115,8 +225,8 @@ class EpisodeServiceTest extends Specification{
         def episodeId = 1L
 
         Episode episode = Episode.builder()
-                            .id(episodeId)
-                            .build()
+                .id(episodeId)
+                .build()
 
         def novelId = 1L
 
@@ -133,5 +243,53 @@ class EpisodeServiceTest extends Specification{
 
         then:
         1* episodeRepository.delete(_)
+    }
+
+    def "에피소드 삭제 시 소설을 못찾을 경우 예외를 반환한다"(){
+
+        given:
+        def episodeRepository = Mock(EpisodeRepository.class)
+        def novelRepository = Mock(NovelRepository.class)
+        def episodeService = new EpisodeService(episodeRepository, novelRepository)
+
+        def episodeId = 1L
+
+        def novelId = 1L
+
+
+        //stub
+        novelRepository.findById(novelId) >> null
+
+        when:
+        episodeService.deleteEpisode(novelId, episodeId)
+
+        then:
+        thrown(NullPointerException)
+    }
+
+    def "에피소드 삭제 시 에피소드를 못찾을 경우 예외를 반환한다"(){
+
+        given:
+        def episodeRepository = Mock(EpisodeRepository.class)
+        def novelRepository = Mock(NovelRepository.class)
+        def episodeService = new EpisodeService(episodeRepository, novelRepository)
+
+        def episodeId = 1L
+
+        def novelId = 1L
+
+        Novel novel = Novel.builder()
+                .id(novelId)
+                .build()
+
+        //stub
+        novelRepository.findById(novelId) >> Optional.of(novel)
+        episodeRepository.findById(episodeId) >> null
+
+        when:
+        episodeService.deleteEpisode(novelId, episodeId)
+
+        then:
+        thrown(NullPointerException)
     }
 }
