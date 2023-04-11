@@ -59,7 +59,7 @@ public class NovelService {
         return NovelInfoResponseList.toResponseList(novels);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public NovelInfoResponseList retrieveNovelsByGenre(String koreanGenre) {
 
         Genre genre = Genre.fromKoreanName(koreanGenre);
@@ -69,6 +69,7 @@ public class NovelService {
         return NovelInfoResponseList.toResponseList(novels);
     }
 
+    @Transactional(readOnly = true)
     public NovelInfoResponseList retrieveNovelsBySearch(String titleOrAuthor) {
 
         List<Novel> novels = novelRepository.findByTitleContainingOrAuthorContaining(titleOrAuthor, titleOrAuthor);
@@ -76,6 +77,7 @@ public class NovelService {
         return NovelInfoResponseList.toResponseList(novels);
     }
 
+    @Transactional(readOnly = true)
     public NovelInfoResponseList retrieveLatestUpdateNovels() {
 
         List<Novel> novels = novelRepository.findByOrderByUpdatedAtDesc();
