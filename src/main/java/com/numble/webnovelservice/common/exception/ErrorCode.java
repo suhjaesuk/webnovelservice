@@ -28,6 +28,8 @@ public enum ErrorCode {
     NOT_VALID_GENRE(HttpStatus.BAD_REQUEST, "NOVEL_001", "유효하지 않은 장르입니다."),
     NOT_VALID_SERIALIZED_STATUS(HttpStatus.BAD_REQUEST, "NOVEL_002", "유효하지 않은 연재 상태입니다."),
     NOT_FOUND_NOVEL(HttpStatus.NOT_FOUND, "NOVEL_003", "찾을 수 없는 소설입니다."),
+
+    NOT_FOUND_EPISODE(HttpStatus.NOT_FOUND, "NOVEL_001", "찾을 수 없는 에피소드입니다."),
     ;
 
     private final HttpStatus httpStatus;
