@@ -78,4 +78,9 @@ public class Novel extends Timestamped {
         this.coverImage = request.getCoverImage();
         this.serializedStatus = serializedStatusEnum;
     }
+
+    public void updateUpdatedAt(){
+
+        this.updatedAt = LocalDateTime.now();
+    }
 }
