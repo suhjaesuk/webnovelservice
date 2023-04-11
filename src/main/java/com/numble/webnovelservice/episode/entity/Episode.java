@@ -37,7 +37,7 @@ public class Episode extends Timestamped {
     private Integer totalPageCount;
 
     @Column(nullable = false)
-    private boolean isFree;
+    private Boolean isFree;
 
     @Column(nullable = false)
     private Integer neededTicketCount;
@@ -68,7 +68,7 @@ public class Episode extends Timestamped {
 
     public void updateInfo(EpisodeUpdateRequest request){
 
-        boolean isFree = (request.getNeededTicketCount() == 0);
+        Boolean isFree = (request.getNeededTicketCount() == 0);
 
         this.title = request.getTitle();
         this.content = request.getContent();
