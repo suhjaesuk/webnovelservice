@@ -9,7 +9,7 @@ import lombok.Getter;
 import java.util.Optional;
 
 @Getter
-public class PointTransactionResponse {
+public class PointTransactionInfoResponse {
 
     private Long pointTransactionId;
 
@@ -20,7 +20,7 @@ public class PointTransactionResponse {
     private String createdAt;
 
     @Builder
-    public PointTransactionResponse(Long pointTransactionId, String type, Integer amount, String createdAt) {
+    public PointTransactionInfoResponse(Long pointTransactionId, String type, Integer amount, String createdAt) {
 
         this.pointTransactionId = pointTransactionId;
         this.type = type;
@@ -28,14 +28,14 @@ public class PointTransactionResponse {
         this.createdAt = createdAt;
     }
 
-    public static PointTransactionResponse toResponse(PointTransaction pointTransaction){
+    public static PointTransactionInfoResponse toResponse(PointTransaction pointTransaction){
 
         String koreanType = Type.toKoreanName(pointTransaction.getType());
         String convertedCreatedAt = Optional.ofNullable(pointTransaction.getCreatedAt())
                                             .map(TimeConverter::toStringFormat)
                                             .orElse(null);
 
-        return PointTransactionResponse.builder()
+        return PointTransactionInfoResponse.builder()
                 .pointTransactionId(pointTransaction.getId())
                 .type(koreanType)
                 .amount(pointTransaction.getAmount())
