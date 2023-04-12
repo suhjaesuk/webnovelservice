@@ -24,6 +24,7 @@ public class PointTransaction extends Transaction{
 
     @Builder
     public PointTransaction(Type type, Integer amount, Integer balance, Member member, Long id) {
+
         super(type, amount, balance, member);
         this.id = id;
     }
