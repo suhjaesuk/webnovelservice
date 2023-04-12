@@ -9,11 +9,11 @@ import java.util.stream.Collectors;
 @Getter
 public class PointTransactionInfoResponseList {
 
-    private List<PointTransactionInfoResponse> pointTransactionResponses;
+    private List<PointTransactionInfoResponse> pointTransactions;
 
     public PointTransactionInfoResponseList(List<PointTransactionInfoResponse> pointTransactionResponses) {
 
-        this.pointTransactionResponses = pointTransactionResponses;
+        this.pointTransactions = pointTransactionResponses;
     }
 
     public static PointTransactionInfoResponseList toResponse(List<PointTransaction> pointTransactions) {

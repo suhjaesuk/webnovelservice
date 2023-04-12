@@ -34,6 +34,6 @@ public class PointTransactionController {
                                                              @RequestBody PointTransactionChargeRequest request){
 
         pointTransactionService.chargePoint(userDetails.getMember(), request);
-        return new ResponseEntity<>(new ResponseMessage<>("포인트 거래 기록 조회 성공", null), HttpStatus.CREATED);
+        return new ResponseEntity<>(new ResponseMessage<>("포인트 충전 성공", null), HttpStatus.CREATED);
     }
 }

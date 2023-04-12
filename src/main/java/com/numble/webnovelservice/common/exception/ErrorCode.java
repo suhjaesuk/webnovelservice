@@ -30,6 +30,8 @@ public enum ErrorCode {
     NOT_FOUND_NOVEL(HttpStatus.NOT_FOUND, "NOVEL_003", "찾을 수 없는 소설입니다."),
 
     NOT_FOUND_EPISODE(HttpStatus.NOT_FOUND, "NOVEL_001", "찾을 수 없는 에피소드입니다."),
+
+    INSUFFICIENT_POINT(HttpStatus.BAD_REQUEST, "POINT_TRANSACTION_001", "포인트가 부족합니다."),
     ;
 
     private final HttpStatus httpStatus;
