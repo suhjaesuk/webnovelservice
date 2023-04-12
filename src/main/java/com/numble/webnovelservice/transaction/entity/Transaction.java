@@ -40,6 +40,7 @@ public class Transaction extends Timestamped {
     private Member member;
 
     public Transaction(Type type, Integer amount, Integer balance, Member member) {
+
         this.type = type;
         this.amount = amount;
         this.balance = balance;
