@@ -63,4 +63,10 @@ public class Member extends Timestamped{
 
         this.pointAmount += amount;
     }
+
+    public void chargeTicket(Integer amount) {
+
+        this.pointAmount -= 100 * amount;
+        this.ticketCount += amount;
+    }
 }
