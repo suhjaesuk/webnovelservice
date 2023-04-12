@@ -59,4 +59,8 @@ public class Member extends Timestamped{
         this.profileImage = profileImage;
     }
 
+    public void chargePoint(Integer amount){
+
+        this.pointAmount += amount;
+    }
 }
