@@ -79,9 +79,9 @@ public class OwnedEpisodeService {
 
         ownedEpisode.markAsRead();
 
-        episode.incrementViewCount();
+        episode.increaseViewCount();
 
-        novel.incrementTotalViewCount();
+        novel.increaseTotalViewCount();
 
         return OwnedEpisodeReadResponse.toResponse(ownedEpisode);
     }

@@ -84,8 +84,18 @@ public class Novel extends Timestamped {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public void incrementTotalViewCount(){
+    public void increaseTotalViewCount(){
 
         this.totalViewCount++;
+    }
+
+    public void increaseLikeCount(){
+
+        this.likeCount++;
+    }
+
+    public void decreaseLikeCount(){
+
+        this.likeCount--;
     }
 }
