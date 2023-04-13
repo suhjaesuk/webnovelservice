@@ -12,6 +12,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import static com.numble.webnovelservice.transaction.entity.Type.CONSUME;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -26,5 +28,19 @@ public class TicketTransaction extends Transaction{
     public TicketTransaction(Type type, Integer amount, Integer balance, Member member, Long id) {
         super(type, amount, balance, member);
         this.id = id;
+    }
+
+
+    public static TicketTransaction createConsumeTicketTransaction(Member member, int amount) {
+
+        Type type = CONSUME;
+        Integer balance = member.getTicketCount() - amount;
+
+        return TicketTransaction.builder()
+                                .type(type)
+                                .amount(amount)
+                                .balance(balance)
+                                .member(member)
+                                .build();
     }
 }
