@@ -1,6 +1,6 @@
-package com.numble.webnovelservice.like.dto.response;
+package com.numble.webnovelservice.favoritenovel.dto.response;
 
-import com.numble.webnovelservice.like.entity.FavoriteNovel;
+import com.numble.webnovelservice.favoritenovel.entity.FavoriteNovel;
 import lombok.Getter;
 
 import java.util.List;

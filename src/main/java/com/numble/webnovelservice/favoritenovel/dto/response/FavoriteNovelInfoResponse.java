@@ -1,6 +1,6 @@
-package com.numble.webnovelservice.like.dto.response;
+package com.numble.webnovelservice.favoritenovel.dto.response;
 
-import com.numble.webnovelservice.like.entity.FavoriteNovel;
+import com.numble.webnovelservice.favoritenovel.entity.FavoriteNovel;
 import com.numble.webnovelservice.novel.entity.Genre;
 import com.numble.webnovelservice.novel.entity.Novel;
 import com.numble.webnovelservice.novel.entity.SerializedStatus;

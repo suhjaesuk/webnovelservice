@@ -1,4 +1,4 @@
-package com.numble.webnovelservice.like.entity;
+package com.numble.webnovelservice.favoritenovel.entity;
 
 import com.numble.webnovelservice.member.entity.Member;
 import com.numble.webnovelservice.novel.entity.Novel;

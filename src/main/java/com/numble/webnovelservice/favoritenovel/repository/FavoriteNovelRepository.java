@@ -1,6 +1,6 @@
-package com.numble.webnovelservice.like.repository;
+package com.numble.webnovelservice.favoritenovel.repository;
 
-import com.numble.webnovelservice.like.entity.FavoriteNovel;
+import com.numble.webnovelservice.favoritenovel.entity.FavoriteNovel;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

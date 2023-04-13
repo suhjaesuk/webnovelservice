@@ -1,8 +1,8 @@
-package com.numble.webnovelservice.like.controller;
+package com.numble.webnovelservice.favoritenovel.controller;
 
 import com.numble.webnovelservice.common.response.ResponseMessage;
-import com.numble.webnovelservice.like.dto.response.FavoriteNovelInfoResponseList;
-import com.numble.webnovelservice.like.service.FavoriteNovelService;
+import com.numble.webnovelservice.favoritenovel.dto.response.FavoriteNovelInfoResponseList;
+import com.numble.webnovelservice.favoritenovel.service.FavoriteNovelService;
 import com.numble.webnovelservice.util.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

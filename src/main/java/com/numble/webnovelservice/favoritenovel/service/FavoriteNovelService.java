@@ -1,9 +1,9 @@
-package com.numble.webnovelservice.like.service;
+package com.numble.webnovelservice.favoritenovel.service;
 
 import com.numble.webnovelservice.common.exception.WebNovelServiceException;
-import com.numble.webnovelservice.like.dto.response.FavoriteNovelInfoResponseList;
-import com.numble.webnovelservice.like.entity.FavoriteNovel;
-import com.numble.webnovelservice.like.repository.FavoriteNovelRepository;
+import com.numble.webnovelservice.favoritenovel.dto.response.FavoriteNovelInfoResponseList;
+import com.numble.webnovelservice.favoritenovel.entity.FavoriteNovel;
+import com.numble.webnovelservice.favoritenovel.repository.FavoriteNovelRepository;
 import com.numble.webnovelservice.member.entity.Member;
 import com.numble.webnovelservice.novel.entity.Novel;
 import com.numble.webnovelservice.novel.repository.NovelRepository;
