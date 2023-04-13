@@ -1,6 +1,7 @@
 package com.numble.webnovelservice.episode.service;
 
 import com.numble.webnovelservice.common.exception.WebNovelServiceException;
+import com.numble.webnovelservice.episode.dto.response.OwnedEpisodeInfoResponseList;
 import com.numble.webnovelservice.episode.dto.response.OwnedEpisodeReadResponse;
 import com.numble.webnovelservice.episode.entity.Episode;
 import com.numble.webnovelservice.episode.entity.OwnedEpisode;
@@ -14,6 +15,8 @@ import com.numble.webnovelservice.transaction.repository.TicketTransactionReposi
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static com.numble.webnovelservice.common.exception.ErrorCode.INSUFFICIENT_TICKET;
 import static com.numble.webnovelservice.common.exception.ErrorCode.NOT_FOUND_EPISODE;
@@ -100,7 +103,8 @@ public class OwnedEpisodeService {
         ownedEpisode.readNextPage();
     }
 
-    private static void throwIfInvalidPageNumber(int currentReadingPage, int totalPage) {
+    private void throwIfInvalidPageNumber(int currentReadingPage, int totalPage) {
+        
         if(currentReadingPage >= totalPage){
             throw new WebNovelServiceException(PAGE_OUT_OF_BOUND);
         }
@@ -120,9 +124,18 @@ public class OwnedEpisodeService {
         ownedEpisode.readPreviousPage();
     }
 
-    private static void throwIfInvalidPageNumber(int currentReadingPage) {
+    private void throwIfInvalidPageNumber(int currentReadingPage) {
+
         if(currentReadingPage <= 1){
             throw new WebNovelServiceException(PAGE_OUT_OF_BOUND);
         }
+    }
+
+    @Transactional(readOnly = true)
+    public OwnedEpisodeInfoResponseList retrieveOwnedEpisodesByMember(Member currentMember) {
+
+        List<OwnedEpisode> ownedEpisodes =  ownedEpisodeRepository.findByMemberId(currentMember.getId());
+
+        return OwnedEpisodeInfoResponseList.toResponse(ownedEpisodes);
     }
 }
