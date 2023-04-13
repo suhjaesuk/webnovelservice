@@ -78,7 +78,7 @@ public class Episode extends Timestamped {
         this.fileSize = request.getFileSize();
     }
 
-    public void incrementViewCount(){
+    public void increaseViewCount(){
 
         this.viewCount++;
     }
