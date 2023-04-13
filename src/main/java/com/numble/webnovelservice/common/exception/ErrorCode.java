@@ -33,7 +33,7 @@ public enum ErrorCode {
 
     INSUFFICIENT_POINT(HttpStatus.BAD_REQUEST, "POINT_TRANSACTION_001", "포인트가 부족합니다."),
 
-    INSUFFICIENT_TICKET(HttpStatus.BAD_REQUEST, "TICKET_TRANSACTION_001", "소장권이 부족합니다."),
+    INSUFFICIENT_TICKET(HttpStatus.BAD_REQUEST, "TICKET_TRANSACTION_002", "소장권이 부족합니다."),
 
     NOT_FOUND_OWNED_EPISODE(HttpStatus.NOT_FOUND, "OWNED_EPISODE_001", "찾을 수 없는 소장 에피소드입니다."),
     PAGE_OUT_OF_BOUND(HttpStatus.BAD_REQUEST, "OWNED_EPISODE_002", "읽을 페이지가 페이지의 범위를 벗어났습니다."),
