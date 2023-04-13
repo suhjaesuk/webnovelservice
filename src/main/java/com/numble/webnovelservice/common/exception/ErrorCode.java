@@ -29,9 +29,15 @@ public enum ErrorCode {
     NOT_VALID_SERIALIZED_STATUS(HttpStatus.BAD_REQUEST, "NOVEL_002", "유효하지 않은 연재 상태입니다."),
     NOT_FOUND_NOVEL(HttpStatus.NOT_FOUND, "NOVEL_003", "찾을 수 없는 소설입니다."),
 
-    NOT_FOUND_EPISODE(HttpStatus.NOT_FOUND, "NOVEL_001", "찾을 수 없는 에피소드입니다."),
+    NOT_FOUND_EPISODE(HttpStatus.NOT_FOUND, "EPISODE_001", "찾을 수 없는 에피소드입니다."),
 
     INSUFFICIENT_POINT(HttpStatus.BAD_REQUEST, "POINT_TRANSACTION_001", "포인트가 부족합니다."),
+
+    INSUFFICIENT_TICKET(HttpStatus.BAD_REQUEST, "TICKET_TRANSACTION_002", "소장권이 부족합니다."),
+
+    NOT_FOUND_OWNED_EPISODE(HttpStatus.NOT_FOUND, "OWNED_EPISODE_001", "찾을 수 없는 소장 에피소드입니다."),
+    PAGE_OUT_OF_BOUND(HttpStatus.BAD_REQUEST, "OWNED_EPISODE_002", "읽을 페이지가 페이지의 범위를 벗어났습니다."),
+
     ;
 
     private final HttpStatus httpStatus;
