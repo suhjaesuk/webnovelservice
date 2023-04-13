@@ -22,7 +22,7 @@ public class FavoriteNovelController {
 
     private final FavoriteNovelService favoriteNovelService;
 
-    @PostMapping("/novels/{novelId}")
+    @PostMapping("/novels/{novelId}/favorite-novels")
     public ResponseEntity<ResponseMessage<Void>> registerFavoriteNovel(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                                        @PathVariable Long novelId){
 
@@ -30,7 +30,7 @@ public class FavoriteNovelController {
         return new ResponseEntity<>(new ResponseMessage<>("선호 작품 등록 성공",null), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/novels/{novelId}")
+    @DeleteMapping("/novels/{novelId}/favorite-novels")
     public ResponseEntity<ResponseMessage<Void>> removeFavoriteNovel(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                                        @PathVariable Long novelId){
 
