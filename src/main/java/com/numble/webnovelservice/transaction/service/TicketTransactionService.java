@@ -41,11 +41,13 @@ public class TicketTransactionService {
                 () -> new WebNovelServiceException(NOT_FOUND_MEMBER)
         );
 
-        Integer amount = request.getAmount();
+        Integer ticketAmount = request.getAmount();
+        Integer requiredPoint = ticketAmount * 100;
+        Integer availablePoint = member.getPointAmount();
 
-        throwIfNotEnoughPoint(amount, member);
+        throwIfInsufficientPoint(availablePoint, requiredPoint);
 
-        member.chargeTicket(amount);
+        member.chargeTicket(ticketAmount);
 
         TicketTransaction ticketTransaction = request.toTicketTransaction(member);
 
@@ -56,11 +58,9 @@ public class TicketTransactionService {
         pointTransactionRepository.save(pointTransaction);
     }
 
-    private void throwIfNotEnoughPoint(Integer ticketAmount, Member member) {
+    private void throwIfInsufficientPoint(Integer availablePoint, Integer requiredPoint) {
 
-        Integer requiredPoint = ticketAmount * 100;
-
-        if (member.getPointAmount() < requiredPoint) {
+        if (availablePoint < requiredPoint) {
             throw new WebNovelServiceException(INSUFFICIENT_POINT);
         }
     }
