@@ -1,7 +1,7 @@
 package com.numble.webnovelservice.episode.controller;
 
 import com.numble.webnovelservice.common.response.ResponseMessage;
-import com.numble.webnovelservice.episode.dto.response.EpisodeReadResponse;
+import com.numble.webnovelservice.episode.dto.response.OwnedEpisodeReadResponse;
 import com.numble.webnovelservice.episode.service.OwnedEpisodeService;
 import com.numble.webnovelservice.util.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
@@ -30,10 +30,10 @@ public class OwnedEpisodeController {
     }
 
     @PutMapping
-    public ResponseEntity<ResponseMessage<EpisodeReadResponse>> readOwnedEpisode(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                                                 @PathVariable Long episodeId){
+    public ResponseEntity<ResponseMessage<OwnedEpisodeReadResponse>> readOwnedEpisode(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                                                      @PathVariable Long episodeId){
 
-        EpisodeReadResponse response = ownedEpisodeService.readOwnedEpisode(userDetails.getMember(), episodeId);
+        OwnedEpisodeReadResponse response = ownedEpisodeService.readOwnedEpisode(userDetails.getMember(), episodeId);
         return new ResponseEntity<>(new ResponseMessage<>("에피소드 열람 성공",response), HttpStatus.OK);
     }
 

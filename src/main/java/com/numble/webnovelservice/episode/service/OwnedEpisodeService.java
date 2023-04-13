@@ -1,7 +1,7 @@
 package com.numble.webnovelservice.episode.service;
 
 import com.numble.webnovelservice.common.exception.WebNovelServiceException;
-import com.numble.webnovelservice.episode.dto.response.EpisodeReadResponse;
+import com.numble.webnovelservice.episode.dto.response.OwnedEpisodeReadResponse;
 import com.numble.webnovelservice.episode.entity.Episode;
 import com.numble.webnovelservice.episode.entity.OwnedEpisode;
 import com.numble.webnovelservice.episode.repository.EpisodeRepository;
@@ -65,7 +65,7 @@ public class OwnedEpisodeService {
     }
 
     @Transactional
-    public EpisodeReadResponse readOwnedEpisode(Member currentMember, Long episodeId) {
+    public OwnedEpisodeReadResponse readOwnedEpisode(Member currentMember, Long episodeId) {
 
         OwnedEpisode ownedEpisode = ownedEpisodeRepository.findByMemberIdAndEpisodeId(currentMember.getId(), episodeId).orElseThrow(
                 () -> new WebNovelServiceException(NOT_FOUND_OWNED_EPISODE)
@@ -80,7 +80,7 @@ public class OwnedEpisodeService {
 
         novel.incrementTotalViewCount();
 
-        return EpisodeReadResponse.toResponse(ownedEpisode);
+        return OwnedEpisodeReadResponse.toResponse(ownedEpisode);
     }
 
     @Transactional

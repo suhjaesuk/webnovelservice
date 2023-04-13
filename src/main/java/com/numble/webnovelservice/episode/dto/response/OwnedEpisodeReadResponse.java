@@ -5,22 +5,22 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class EpisodeReadResponse {
+public class OwnedEpisodeReadResponse {
 
     private String content;
 
     private Integer currentReadingPage;
 
     @Builder
-    public EpisodeReadResponse(String content, Integer currentReadingPage) {
+    public OwnedEpisodeReadResponse(String content, Integer currentReadingPage) {
 
         this.content = content;
         this.currentReadingPage = currentReadingPage;
     }
 
-    public static EpisodeReadResponse toResponse(OwnedEpisode ownedEpisode) {
+    public static OwnedEpisodeReadResponse toResponse(OwnedEpisode ownedEpisode) {
 
-        return EpisodeReadResponse.builder()
+        return OwnedEpisodeReadResponse.builder()
                 .content(ownedEpisode.getEpisode().getContent())
                 .currentReadingPage(ownedEpisode.getCurrentReadingPage())
                 .build();
