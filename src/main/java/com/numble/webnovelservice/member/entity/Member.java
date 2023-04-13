@@ -42,6 +42,7 @@ public class Member extends Timestamped{
 
     @Builder
     public Member(Long id, String username, String password, String nickname, String profileImage, Integer pointAmount, Integer ticketCount) {
+
         this.id = id;
         this.username = username;
         this.password = password;
@@ -52,10 +53,12 @@ public class Member extends Timestamped{
     }
 
     public void updateNickname(String nickname){
+
         this.nickname = nickname;
     }
 
     public void updateProfileImage(String profileImage){
+
         this.profileImage = profileImage;
     }
 
@@ -68,5 +71,10 @@ public class Member extends Timestamped{
 
         this.pointAmount -= 100 * amount;
         this.ticketCount += amount;
+    }
+
+    public void consumeTicket(int requiredTickets) {
+
+        this.ticketCount -= requiredTickets;
     }
 }
