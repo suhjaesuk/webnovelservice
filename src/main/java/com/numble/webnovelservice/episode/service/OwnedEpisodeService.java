@@ -22,7 +22,7 @@ import static com.numble.webnovelservice.common.exception.ErrorCode.INSUFFICIENT
 import static com.numble.webnovelservice.common.exception.ErrorCode.NOT_FOUND_EPISODE;
 import static com.numble.webnovelservice.common.exception.ErrorCode.NOT_FOUND_MEMBER;
 import static com.numble.webnovelservice.common.exception.ErrorCode.NOT_FOUND_OWNED_EPISODE;
-import static com.numble.webnovelservice.common.exception.ErrorCode.PAGE_OUT_OF_BOUND;
+import static com.numble.webnovelservice.common.exception.ErrorCode.PAGE_OUT_OF_BOUNDS;
 
 @Service
 @RequiredArgsConstructor
@@ -106,7 +106,7 @@ public class OwnedEpisodeService {
     private void throwIfInvalidPageNumber(int currentReadingPage, int totalPage) {
         
         if(currentReadingPage >= totalPage){
-            throw new WebNovelServiceException(PAGE_OUT_OF_BOUND);
+            throw new WebNovelServiceException(PAGE_OUT_OF_BOUNDS);
         }
     }
 
@@ -127,7 +127,7 @@ public class OwnedEpisodeService {
     private void throwIfInvalidPageNumber(int currentReadingPage) {
 
         if(currentReadingPage <= 1){
-            throw new WebNovelServiceException(PAGE_OUT_OF_BOUND);
+            throw new WebNovelServiceException(PAGE_OUT_OF_BOUNDS);
         }
     }
 
