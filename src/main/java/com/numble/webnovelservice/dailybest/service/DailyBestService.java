@@ -5,7 +5,7 @@ import com.numble.webnovelservice.dailybest.dto.response.DailyBestNovelForPaidRe
 import com.numble.webnovelservice.dailybest.dto.response.DailyBestNovelResponseList;
 import com.numble.webnovelservice.novel.entity.Novel;
 import com.numble.webnovelservice.novel.repository.NovelRepository;
-import com.numble.webnovelservice.util.redis.service.RedisService;
+import com.numble.webnovelservice.util.redis.repository.DailyBestRedisRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,11 +18,11 @@ import java.util.List;
 public class DailyBestService {
 
     private final NovelRepository novelRepository;
-    private final RedisService redisService;
+    private final DailyBestRedisRepository dailyBestRedisRepository;
 
     public DailyBestNovelResponseList retrieveDailyBestNovelForAllPaymentType() {
 
-        List<String> novelsTitle = redisService.getDailyBestsNovelTitleForAllPaymentType();
+        List<String> novelsTitle = dailyBestRedisRepository.getDailyBestsNovelTitleForAllPaymentType();
 
         List<Novel> novels = novelRepository.findByTitleIn(novelsTitle);
 
@@ -31,7 +31,7 @@ public class DailyBestService {
 
     public DailyBestNovelForPaidResponseList retrieveDailyBestNovelForPaid() {
 
-        List<String> novelsTitle = redisService.getDailyBestsNovelTitleForPaid();
+        List<String> novelsTitle = dailyBestRedisRepository.getDailyBestsNovelTitleForPaid();
 
         List<Novel> novels = novelRepository.findByTitleIn(novelsTitle);
 
@@ -40,7 +40,7 @@ public class DailyBestService {
 
     public DailyBestNovelForFreeResponseList retrieveDailyBestNovelForFree() {
 
-        List<String> novelsTitle = redisService.getDailyBestsNovelTitleForFree();
+        List<String> novelsTitle = dailyBestRedisRepository.getDailyBestsNovelTitleForFree();
 
         List<Novel> novels = novelRepository.findByTitleIn(novelsTitle);
 

@@ -13,7 +13,7 @@ import com.numble.webnovelservice.member.repository.MemberRepository;
 import com.numble.webnovelservice.novel.entity.Novel;
 import com.numble.webnovelservice.transaction.entity.TicketTransaction;
 import com.numble.webnovelservice.transaction.repository.TicketTransactionRepository;
-import com.numble.webnovelservice.util.redis.service.RedisService;
+import com.numble.webnovelservice.util.redis.repository.DailyBestRedisRepository;
 import lombok.RequiredArgsConstructor;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
@@ -43,7 +43,7 @@ public class OwnedEpisodeService {
     private final MemberRepository memberRepository;
     private final TicketTransactionRepository ticketTransactionRepository;
     private final RedissonClient redissonClient;
-    private final RedisService redisService;
+    private final DailyBestRedisRepository dailyBestRedisRepository;
 
     @Transactional
     public void purchaseEpisode(Member currentMember, Long episodeId) {
@@ -112,7 +112,7 @@ public class OwnedEpisodeService {
         novel.increaseTotalViewCount();
 
         PaymentType payment = getEpisodePaymentType(episode.getIsFree());
-        redisService.increaseDailyView(novel.getTitle(), payment);
+        dailyBestRedisRepository.increaseDailyView(novel.getTitle(), payment);
 
         return OwnedEpisodeReadResponse.toResponse(ownedEpisode);
     }

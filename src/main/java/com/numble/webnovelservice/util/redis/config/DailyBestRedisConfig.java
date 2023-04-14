@@ -9,7 +9,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
-public class RedisConfig {
+public class DailyBestRedisConfig {
 
     @Value("${spring.redis.dailybest-host}")
     private String host;

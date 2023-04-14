@@ -1,4 +1,4 @@
-package com.numble.webnovelservice.util.redis.service;
+package com.numble.webnovelservice.util.redis.repository;
 
 import com.numble.webnovelservice.episode.entity.PaymentType;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class RedisService {
+public class DailyBestRedisRepository {
 
     private final RedisTemplate<String, String> redisTemplate;
 
