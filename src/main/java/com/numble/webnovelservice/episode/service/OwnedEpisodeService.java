@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.numble.webnovelservice.common.exception.ErrorCode.DUPLICATE_OWNED_EPISODE;
 import static com.numble.webnovelservice.common.exception.ErrorCode.INSUFFICIENT_TICKET;
 import static com.numble.webnovelservice.common.exception.ErrorCode.NOT_FOUND_EPISODE;
 import static com.numble.webnovelservice.common.exception.ErrorCode.NOT_FOUND_MEMBER;
@@ -36,34 +37,39 @@ public class OwnedEpisodeService {
     @Transactional
     public void purchaseEpisode(Member currentMember, Long episodeId) {
 
-        Member member = memberRepository.findById(currentMember.getId()).orElseThrow(
-                () -> new WebNovelServiceException(NOT_FOUND_MEMBER)
-        );
+        throwIfDuplicateOwnedEpisode(currentMember.getId(), episodeId);
 
+        Member member = memberRepository.findById(currentMember.getId()).orElseThrow(
+                () -> new WebNovelServiceException(NOT_FOUND_MEMBER));
         Episode episode = episodeRepository.findById(episodeId).orElseThrow(
-                () -> new WebNovelServiceException(NOT_FOUND_EPISODE)
-        );
+                () -> new WebNovelServiceException(NOT_FOUND_EPISODE));
 
         int availableTickets = member.getTicketCount();
         int requiredTickets = episode.getNeededTicketCount();
 
         throwIfInsufficientTicket(availableTickets, requiredTickets);
-
         member.consumeTicket(requiredTickets);
 
         OwnedEpisode ownedEpisode = OwnedEpisode.createOwnedEpisode(member, episode);
-
-        ownedEpisodeRepository.save(ownedEpisode);
-
         TicketTransaction ticketTransaction = TicketTransaction.createConsumeTicketTransaction(member, requiredTickets);
 
+        episode.addOwnedEpisode(ownedEpisode);
+
+        ownedEpisodeRepository.save(ownedEpisode);
         ticketTransactionRepository.save(ticketTransaction);
     }
 
-    private static void throwIfInsufficientTicket(int availableTickets, int requiredTickets) {
+    private void throwIfInsufficientTicket(int availableTickets, int requiredTickets) {
 
         if(availableTickets < requiredTickets){
              throw new WebNovelServiceException(INSUFFICIENT_TICKET);
+        }
+    }
+
+    private void throwIfDuplicateOwnedEpisode(Long memberId, Long episodeId) {
+
+        if(ownedEpisodeRepository.existsByMemberIdAndEpisodeId(memberId, episodeId)){
+            throw new WebNovelServiceException(DUPLICATE_OWNED_EPISODE);
         }
     }
 
@@ -71,16 +77,13 @@ public class OwnedEpisodeService {
     public OwnedEpisodeReadResponse readOwnedEpisode(Member currentMember, Long episodeId) {
 
         OwnedEpisode ownedEpisode = ownedEpisodeRepository.findByMemberIdAndEpisodeId(currentMember.getId(), episodeId).orElseThrow(
-                () -> new WebNovelServiceException(NOT_FOUND_OWNED_EPISODE)
-        );
+                () -> new WebNovelServiceException(NOT_FOUND_OWNED_EPISODE));
 
         Episode episode = ownedEpisode.getEpisode();
         Novel novel = episode.getNovel();
 
         ownedEpisode.markAsRead();
-
         episode.increaseViewCount();
-
         novel.increaseTotalViewCount();
 
         return OwnedEpisodeReadResponse.toResponse(ownedEpisode);
@@ -90,8 +93,7 @@ public class OwnedEpisodeService {
     public void readOwnedEpisodeNextPage(Member currentMember, Long episodeId) {
 
         OwnedEpisode ownedEpisode = ownedEpisodeRepository.findByMemberIdAndEpisodeId(currentMember.getId(), episodeId).orElseThrow(
-                () -> new WebNovelServiceException(NOT_FOUND_OWNED_EPISODE)
-        );
+                () -> new WebNovelServiceException(NOT_FOUND_OWNED_EPISODE));
 
         Episode episode = ownedEpisode.getEpisode();
 
@@ -114,8 +116,7 @@ public class OwnedEpisodeService {
     public void readOwnedEpisodePreviousPage(Member currentMember, Long episodeId) {
 
         OwnedEpisode ownedEpisode = ownedEpisodeRepository.findByMemberIdAndEpisodeId(currentMember.getId(), episodeId).orElseThrow(
-                () -> new WebNovelServiceException(NOT_FOUND_OWNED_EPISODE)
-        );
+                () -> new WebNovelServiceException(NOT_FOUND_OWNED_EPISODE));
 
         int currentReadingPage = ownedEpisode.getCurrentReadingPage();
 
