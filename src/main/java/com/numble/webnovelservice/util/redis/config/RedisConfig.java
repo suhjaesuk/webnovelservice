@@ -22,20 +22,26 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, Object> redisTemplate() {
-        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+    public RedisTemplate<String, String> redisTemplate() {
+
+        RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
+
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new StringRedisSerializer());
         redisTemplate.setConnectionFactory(redisConnectionFactory());
+
         return redisTemplate;
     }
 
     @Bean
     public StringRedisTemplate stringRedisTemplate(){
+
         final StringRedisTemplate stringRedisTemplate = new StringRedisTemplate();
+
         stringRedisTemplate.setKeySerializer(new StringRedisSerializer());
         stringRedisTemplate.setValueSerializer(new StringRedisSerializer());
         stringRedisTemplate.setConnectionFactory(redisConnectionFactory());
+
         return stringRedisTemplate;
     }
 }

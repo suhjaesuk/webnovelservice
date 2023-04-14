@@ -5,6 +5,7 @@ import com.numble.webnovelservice.episode.dto.response.OwnedEpisodeInfoResponseL
 import com.numble.webnovelservice.episode.dto.response.OwnedEpisodeReadResponse;
 import com.numble.webnovelservice.episode.entity.Episode;
 import com.numble.webnovelservice.episode.entity.OwnedEpisode;
+import com.numble.webnovelservice.episode.entity.PaymentType;
 import com.numble.webnovelservice.episode.repository.EpisodeRepository;
 import com.numble.webnovelservice.episode.repository.OwnedEpisodeRepository;
 import com.numble.webnovelservice.member.entity.Member;
@@ -12,6 +13,7 @@ import com.numble.webnovelservice.member.repository.MemberRepository;
 import com.numble.webnovelservice.novel.entity.Novel;
 import com.numble.webnovelservice.transaction.entity.TicketTransaction;
 import com.numble.webnovelservice.transaction.repository.TicketTransactionRepository;
+import com.numble.webnovelservice.util.redis.service.RedisService;
 import lombok.RequiredArgsConstructor;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
@@ -28,6 +30,9 @@ import static com.numble.webnovelservice.common.exception.ErrorCode.NOT_FOUND_EP
 import static com.numble.webnovelservice.common.exception.ErrorCode.NOT_FOUND_MEMBER;
 import static com.numble.webnovelservice.common.exception.ErrorCode.NOT_FOUND_OWNED_EPISODE;
 import static com.numble.webnovelservice.common.exception.ErrorCode.PAGE_OUT_OF_BOUNDS;
+import static com.numble.webnovelservice.episode.entity.PaymentType.FREE;
+import static com.numble.webnovelservice.episode.entity.PaymentType.PAID;
+
 
 @Service
 @RequiredArgsConstructor
@@ -38,6 +43,7 @@ public class OwnedEpisodeService {
     private final MemberRepository memberRepository;
     private final TicketTransactionRepository ticketTransactionRepository;
     private final RedissonClient redissonClient;
+    private final RedisService redisService;
 
     @Transactional
     public void purchaseEpisode(Member currentMember, Long episodeId) {
@@ -105,7 +111,18 @@ public class OwnedEpisodeService {
         episode.increaseViewCount();
         novel.increaseTotalViewCount();
 
+        PaymentType payment = getEpisodePaymentType(episode.getIsFree());
+        redisService.increaseDailyView(novel.getTitle(), payment);
+
         return OwnedEpisodeReadResponse.toResponse(ownedEpisode);
+    }
+
+    private PaymentType getEpisodePaymentType(Boolean isFree) {
+
+        PaymentType payment = PAID;
+        if(isFree)  payment = FREE;
+
+        return payment;
     }
 
     @Transactional
