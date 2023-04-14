@@ -39,7 +39,7 @@ public class OwnedEpisodeController {
         return new ResponseEntity<>(new ResponseMessage<>("에피소드 열람 성공",response), HttpStatus.OK);
     }
 
-    @PutMapping("/{episodeId}")
+    @PutMapping("/{episodeId}/next-page")
     public ResponseEntity<ResponseMessage<Void>> readOwnedEpisodeNextPage(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                                             @PathVariable Long episodeId){
 
@@ -47,7 +47,7 @@ public class OwnedEpisodeController {
         return new ResponseEntity<>(new ResponseMessage<>("에피소드 다음 페이지 읽기 성공", null), HttpStatus.OK);
     }
 
-    @PutMapping("/{episodeId}")
+    @PutMapping("/{episodeId}/previous-page")
     public ResponseEntity<ResponseMessage<Void>> readOwnedEpisodePreviousPage(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                                           @PathVariable Long episodeId){
 
