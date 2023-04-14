@@ -28,7 +28,7 @@ public class RedisService {
      * @param title(Key) 소설의 제목
      * @param payment(Value) 결제방식(무료, 유료)
      *
-     * Key (제목) 가 같아도 Value (결제 방식) 값이 다를 경우 다른 해시맵에 담깁니다.
+     * Key (제목) 가 같아도 Value (결제 방식) 값이 다를 경우 다른 값입니다.
      *
      * 현재 시간을 가져와서 자정까지 남은 시간을 계산합니다.
      * 데이터를 Redis에 저장하고 만료 시간을 설정합니다.
