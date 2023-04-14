@@ -13,6 +13,7 @@ public class DailyBestNovelForFreeResponseList {
     private List<NovelInfoResponse> freeDailyBests;
 
     public DailyBestNovelForFreeResponseList(List<NovelInfoResponse> freeDailyBests) {
+
         this.freeDailyBests = freeDailyBests;
     }
 
