@@ -16,6 +16,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -52,6 +55,9 @@ public class Episode extends Timestamped {
     @JoinColumn(name="novel_id")
     private Novel novel;
 
+    @OneToMany(mappedBy = "episode")
+    private List<OwnedEpisode> ownedEpisodes = new ArrayList<>();
+
     @Builder
     public Episode(Long id, String title, String content, Integer totalPageCount, Boolean isFree, Integer neededTicketCount, Float fileSize, Integer viewCount, Novel novel) {
 
@@ -81,5 +87,10 @@ public class Episode extends Timestamped {
     public void increaseViewCount(){
 
         this.viewCount++;
+    }
+
+    public void addOwnedEpisode(OwnedEpisode ownedEpisode){
+
+        ownedEpisodes.add(ownedEpisode);
     }
 }
