@@ -13,13 +13,17 @@ import com.numble.webnovelservice.novel.entity.Novel;
 import com.numble.webnovelservice.transaction.entity.TicketTransaction;
 import com.numble.webnovelservice.transaction.repository.TicketTransactionRepository;
 import lombok.RequiredArgsConstructor;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static com.numble.webnovelservice.common.exception.ErrorCode.DUPLICATE_OWNED_EPISODE;
 import static com.numble.webnovelservice.common.exception.ErrorCode.INSUFFICIENT_TICKET;
+import static com.numble.webnovelservice.common.exception.ErrorCode.NOT_AVAILABLE_LOCK;
 import static com.numble.webnovelservice.common.exception.ErrorCode.NOT_FOUND_EPISODE;
 import static com.numble.webnovelservice.common.exception.ErrorCode.NOT_FOUND_MEMBER;
 import static com.numble.webnovelservice.common.exception.ErrorCode.NOT_FOUND_OWNED_EPISODE;
@@ -33,30 +37,45 @@ public class OwnedEpisodeService {
     private final EpisodeRepository episodeRepository;
     private final MemberRepository memberRepository;
     private final TicketTransactionRepository ticketTransactionRepository;
+    private final RedissonClient redissonClient;
 
     @Transactional
     public void purchaseEpisode(Member currentMember, Long episodeId) {
 
-        throwIfDuplicateOwnedEpisode(currentMember.getId(), episodeId);
+        String lockName = "purchase-episode" + " / " + "username: " + currentMember.getUsername() + " / " + "episodeId: " + episodeId;
+        RLock lock = redissonClient.getLock(lockName);
 
-        Member member = memberRepository.findById(currentMember.getId()).orElseThrow(
-                () -> new WebNovelServiceException(NOT_FOUND_MEMBER));
-        Episode episode = episodeRepository.findById(episodeId).orElseThrow(
-                () -> new WebNovelServiceException(NOT_FOUND_EPISODE));
+        try {
+            boolean isLocked = lock.tryLock(2, 5, TimeUnit.SECONDS);
+            if (!isLocked) throw new WebNovelServiceException(NOT_AVAILABLE_LOCK);
 
-        int availableTickets = member.getTicketCount();
-        int requiredTickets = episode.getNeededTicketCount();
+            throwIfDuplicateOwnedEpisode(currentMember.getId(), episodeId);
 
-        throwIfInsufficientTicket(availableTickets, requiredTickets);
-        member.consumeTicket(requiredTickets);
+            Member member = memberRepository.findById(currentMember.getId()).orElseThrow(
+                    () -> new WebNovelServiceException(NOT_FOUND_MEMBER));
+            Episode episode = episodeRepository.findById(episodeId).orElseThrow(
+                    () -> new WebNovelServiceException(NOT_FOUND_EPISODE));
 
-        OwnedEpisode ownedEpisode = OwnedEpisode.createOwnedEpisode(member, episode);
-        TicketTransaction ticketTransaction = TicketTransaction.createConsumeTicketTransaction(member, requiredTickets);
+            int availableTickets = member.getTicketCount();
+            int requiredTickets = episode.getNeededTicketCount();
 
-        episode.addOwnedEpisode(ownedEpisode);
+            throwIfInsufficientTicket(availableTickets, requiredTickets);
+            member.consumeTicket(requiredTickets);
 
-        ownedEpisodeRepository.save(ownedEpisode);
-        ticketTransactionRepository.save(ticketTransaction);
+            OwnedEpisode ownedEpisode = OwnedEpisode.createOwnedEpisode(member, episode);
+            TicketTransaction ticketTransaction = TicketTransaction.createConsumeTicketTransaction(member, requiredTickets);
+
+            episode.addOwnedEpisode(ownedEpisode);
+
+            ownedEpisodeRepository.save(ownedEpisode);
+            ticketTransactionRepository.save(ticketTransaction);
+
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+
+        } finally {
+            lock.unlock();
+        }
     }
 
     private void throwIfInsufficientTicket(int availableTickets, int requiredTickets) {
