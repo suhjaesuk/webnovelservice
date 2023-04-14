@@ -8,11 +8,15 @@ import com.numble.webnovelservice.transaction.dto.response.PointTransactionInfoR
 import com.numble.webnovelservice.transaction.entity.PointTransaction;
 import com.numble.webnovelservice.transaction.repository.PointTransactionRepository;
 import lombok.RequiredArgsConstructor;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import static com.numble.webnovelservice.common.exception.ErrorCode.NOT_AVAILABLE_LOCK;
 import static com.numble.webnovelservice.common.exception.ErrorCode.NOT_FOUND_MEMBER;
 
 
@@ -22,6 +26,7 @@ public class PointTransactionService {
 
     private final PointTransactionRepository pointTransactionRepository;
     private final MemberRepository memberRepository;
+    private final RedissonClient redissonClient;
 
     @Transactional(readOnly = true)
     public PointTransactionInfoResponseList retrieveCurrentMemberPointTransactions(Member currentMember) {
@@ -34,15 +39,27 @@ public class PointTransactionService {
     @Transactional
     public void chargePoint(Member currentMember, PointTransactionChargeRequest request) {
 
-        Member member = memberRepository.findById(currentMember.getId()).orElseThrow(
-                () -> new WebNovelServiceException(NOT_FOUND_MEMBER)
-        );
+        String lockName = "charge-point" + " / " + "username: " + currentMember.getUsername();
+        RLock lock = redissonClient.getLock(lockName);
 
-        member.chargePoint(request.getAmount());
+        try {
+            boolean isLocked = lock.tryLock(2, 5, TimeUnit.SECONDS);
+            if (!isLocked) throw new WebNovelServiceException(NOT_AVAILABLE_LOCK);
+            Member member = memberRepository.findById(currentMember.getId()).orElseThrow(
+                    () -> new WebNovelServiceException(NOT_FOUND_MEMBER)
+            );
 
-        PointTransaction pointTransaction = request.toPointTransaction(member);
+            member.chargePoint(request.getAmount());
 
-        pointTransactionRepository.save(pointTransaction);
+            PointTransaction pointTransaction = request.toPointTransaction(member);
+
+            pointTransactionRepository.save(pointTransaction);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+
+        } finally {
+            lock.unlock();
+        }
     }
 }
 
