@@ -11,4 +11,6 @@ public interface OwnedEpisodeRepository extends JpaRepository<OwnedEpisode, Long
     Optional<OwnedEpisode> findByMemberIdAndEpisodeId(Long memberId, Long episodeId);
 
     List<OwnedEpisode> findByMemberId(Long id);
+
+    boolean existsByMemberIdAndEpisodeId(Long memberId, Long episodeId);
 }
