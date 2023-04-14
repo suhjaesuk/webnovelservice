@@ -1,8 +1,13 @@
 package com.numble.webnovelservice.novel.service;
 
 import com.numble.webnovelservice.common.exception.WebNovelServiceException;
+import com.numble.webnovelservice.episode.entity.Episode;
+import com.numble.webnovelservice.episode.entity.OwnedEpisode;
+import com.numble.webnovelservice.episode.repository.EpisodeRepository;
+import com.numble.webnovelservice.member.entity.Member;
 import com.numble.webnovelservice.novel.dto.request.NovelRegisterRequest;
 import com.numble.webnovelservice.novel.dto.request.NovelUpdateInfoRequest;
+import com.numble.webnovelservice.novel.dto.response.NovelDetailsResponse;
 import com.numble.webnovelservice.novel.dto.response.NovelInfoResponseList;
 import com.numble.webnovelservice.novel.entity.Genre;
 import com.numble.webnovelservice.novel.entity.Novel;
@@ -12,7 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
+import static com.numble.webnovelservice.common.exception.ErrorCode.NOT_FOUND_EPISODE;
 import static com.numble.webnovelservice.common.exception.ErrorCode.NOT_FOUND_NOVEL;
 
 @Service
@@ -20,6 +27,7 @@ import static com.numble.webnovelservice.common.exception.ErrorCode.NOT_FOUND_NO
 public class NovelService {
 
     private final NovelRepository novelRepository;
+    private final EpisodeRepository episodeRepository;
 
     @Transactional
     public void registerNovel(NovelRegisterRequest request){
@@ -83,5 +91,32 @@ public class NovelService {
         List<Novel> novels = novelRepository.findByOrderByUpdatedAtDesc();
 
         return NovelInfoResponseList.toResponseList(novels);
+    }
+
+    @Transactional(readOnly = true)
+    public NovelDetailsResponse retrieveNovelDetails(Member currentMember, Long novelId) {
+
+        Novel novel = novelRepository.findById(novelId).orElseThrow(
+                () -> new WebNovelServiceException(NOT_FOUND_NOVEL)
+        );
+
+        List<Episode> episodes= episodeRepository.findByNovelId(novelId).orElseThrow(
+                () -> new WebNovelServiceException(NOT_FOUND_EPISODE)
+        );
+
+        List<OwnedEpisode> currentMemberOwnedNovelEpisodes = getCurrentMemberOwnedNovelEpisodes(currentMember, episodes);
+
+        return NovelDetailsResponse.toResponse(novel, episodes, currentMemberOwnedNovelEpisodes);
+    }
+
+    private List<OwnedEpisode> getCurrentMemberOwnedNovelEpisodes(Member currentMember, List<Episode> episodes) {
+
+        return episodes.stream()
+                .map(episode -> episode.getOwnedEpisodes()
+                        .stream()
+                        .filter(ownedEpisode -> ownedEpisode.getMember().equals(currentMember))
+                        .findFirst()
+                        .orElse(null))
+                .collect(Collectors.toList());
     }
 }
