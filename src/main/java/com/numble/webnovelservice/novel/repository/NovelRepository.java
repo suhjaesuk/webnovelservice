@@ -13,4 +13,6 @@ public interface NovelRepository extends JpaRepository<Novel, Long> {
     List<Novel> findByTitleContainingOrAuthorContaining(String title, String author);
 
     List<Novel> findByOrderByUpdatedAtDesc();
+
+    List<Novel> findByTitleIn(List<String> title);
 }
