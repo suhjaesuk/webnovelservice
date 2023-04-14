@@ -53,12 +53,6 @@ public class NovelService {
         novelRepository.delete(novel);
     }
 
-    private Novel findNovelById(Long novelId) {
-
-        return novelRepository.findById(novelId).orElseThrow(
-                () -> new WebNovelServiceException(NOT_FOUND_NOVEL));
-    }
-
     @Transactional(readOnly = true)
     public NovelInfoResponseList retrieveAllNovels() {
 
@@ -96,9 +90,7 @@ public class NovelService {
     @Transactional(readOnly = true)
     public NovelDetailsResponse retrieveNovelDetails(Member currentMember, Long novelId) {
 
-        Novel novel = novelRepository.findById(novelId).orElseThrow(
-                () -> new WebNovelServiceException(NOT_FOUND_NOVEL)
-        );
+        Novel novel = findNovelById(novelId);
 
         List<Episode> episodes= episodeRepository.findByNovelId(novelId).orElseThrow(
                 () -> new WebNovelServiceException(NOT_FOUND_EPISODE)
@@ -129,5 +121,11 @@ public class NovelService {
                         .findFirst()
                         .orElse(null))
                 .collect(Collectors.toList());
+    }
+
+    private Novel findNovelById(Long novelId) {
+
+        return novelRepository.findById(novelId).orElseThrow(
+                () -> new WebNovelServiceException(NOT_FOUND_NOVEL));
     }
 }
