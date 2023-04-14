@@ -45,6 +45,8 @@ public enum ErrorCode {
     DUPLICATE_HOME_EXPOSURE(HttpStatus.BAD_REQUEST, "HOME_EXPOSURE_001", "이미 등록된 홈 노출입니다."),
     NOT_FOUND_HOME_EXPOSURE(HttpStatus.NOT_FOUND, "HOME_EXPOSURE_002", "찾을 수 없는 홈 노출입니다."),
     HOME_EXPOSURE_COUNT_OUT_OF_BOUNDS(HttpStatus.BAD_REQUEST, "HOME_EXPOSURE_003", "홈 노출 저장 범위를 벗어났습니다."),
+
+    NOT_AVAILABLE_LOCK(HttpStatus.CONFLICT, "CONCURRENCY_001", "락 획득이 불가능 합니다.")
     ;
 
     private final HttpStatus httpStatus;
