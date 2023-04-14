@@ -3,11 +3,14 @@ package com.numble.webnovelservice.novel.controller;
 import com.numble.webnovelservice.common.response.ResponseMessage;
 import com.numble.webnovelservice.novel.dto.request.NovelRegisterRequest;
 import com.numble.webnovelservice.novel.dto.request.NovelUpdateInfoRequest;
+import com.numble.webnovelservice.novel.dto.response.NovelDetailsResponse;
 import com.numble.webnovelservice.novel.dto.response.NovelInfoResponseList;
 import com.numble.webnovelservice.novel.service.NovelService;
+import com.numble.webnovelservice.util.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -71,5 +74,13 @@ public class NovelController {
 
         NovelInfoResponseList response = novelService.retrieveLatestUpdateNovels();
         return new ResponseEntity<>(new ResponseMessage<>("최신 업데이트 소설 조회 성공", response), HttpStatus.OK);
+    }
+
+    @GetMapping("/{novelId}/details")
+    public ResponseEntity<ResponseMessage<NovelDetailsResponse>> retrieveNovelDetails(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                                                      @PathVariable Long novelId){
+
+        NovelDetailsResponse response = novelService.retrieveNovelDetails(userDetails.getMember(), novelId);
+        return new ResponseEntity<>(new ResponseMessage<>("소설 상세 조회 성공", response), HttpStatus.OK);
     }
 }
