@@ -109,6 +109,17 @@ public class NovelService {
         return NovelDetailsResponse.toResponse(novel, episodes, currentMemberOwnedNovelEpisodes);
     }
 
+    /**
+     * episode 의 ownedEpisodes 에 회원과 일치하는 ownedEpisode 가 있다면,
+     * 리스트에 값을 넣는다.
+     * episode 의 ownedEpisodes 가 null 이거나 회원과 일치하는 ownedEpisode 가 없다면,
+     * 리스트에 null을 넣는다.
+     *
+     * @param currentMember
+     * @param episodes
+     * @return currentMemberOwnedNovelEpisodes = [null, ownedEpisode1, ownedEpisode2, null, ownedEpisode4]
+     *
+     */
     private List<OwnedEpisode> getCurrentMemberOwnedNovelEpisodes(Member currentMember, List<Episode> episodes) {
 
         return episodes.stream()
