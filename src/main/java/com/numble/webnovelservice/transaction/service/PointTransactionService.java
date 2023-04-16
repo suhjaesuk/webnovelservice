@@ -45,6 +45,7 @@ public class PointTransactionService {
         try {
             boolean isLocked = lock.tryLock(2, 5, TimeUnit.SECONDS);
             if (!isLocked) throw new WebNovelServiceException(NOT_AVAILABLE_LOCK);
+
             Member member = memberRepository.findById(currentMember.getId()).orElseThrow(
                     () -> new WebNovelServiceException(NOT_FOUND_MEMBER)
             );
