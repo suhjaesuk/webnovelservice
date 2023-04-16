@@ -29,7 +29,7 @@ public class PointTransactionController {
         return new ResponseEntity<>(new ResponseMessage<>("포인트 거래 기록 조회 성공", response), HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("/deposit")
     public ResponseEntity<ResponseMessage<Void>> chargePoint(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                              @RequestBody PointTransactionChargeRequest request){
 

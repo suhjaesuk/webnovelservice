@@ -30,10 +30,11 @@ public class TicketTransactionChargeRequest {
     public PointTransaction toPointTransaction(Member member){
 
         Type type = CONSUME;
-        Integer balance = member.getPointAmount() - amount;
+        Integer pointAmount = this.amount *100;
+        Integer balance = member.getPointAmount() - pointAmount;
 
         return PointTransaction.builder()
-                .amount(amount)
+                .amount(pointAmount)
                 .balance(balance)
                 .type(type)
                 .member(member)

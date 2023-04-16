@@ -1,6 +1,6 @@
-package com.numble.webnovelservice.episode.repository;
+package com.numble.webnovelservice.ownedepisode.repository;
 
-import com.numble.webnovelservice.episode.entity.OwnedEpisode;
+import com.numble.webnovelservice.ownedepisode.entity.OwnedEpisode;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

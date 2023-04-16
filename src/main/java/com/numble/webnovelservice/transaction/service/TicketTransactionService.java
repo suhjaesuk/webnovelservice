@@ -34,7 +34,7 @@ public class TicketTransactionService {
     @Transactional(readOnly = true)
     public TicketTransactionInfoResponseList retrieveCurrentMemberTicketTransactions(Member currentMember) {
 
-        List<TicketTransaction> ticketTransactions = ticketTransactionRepository.findByMember(currentMember);
+        List<TicketTransaction> ticketTransactions = ticketTransactionRepository.findByMemberOrderByCreatedAtDesc(currentMember);
 
         return TicketTransactionInfoResponseList.toResponse(ticketTransactions);
     }

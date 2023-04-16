@@ -31,7 +31,7 @@ public class PointTransactionService {
     @Transactional(readOnly = true)
     public PointTransactionInfoResponseList retrieveCurrentMemberPointTransactions(Member currentMember) {
 
-        List<PointTransaction> pointTransactions = pointTransactionRepository.findByMember(currentMember);
+        List<PointTransaction> pointTransactions = pointTransactionRepository.findByMemberOrderByCreatedAtDesc(currentMember);
 
         return PointTransactionInfoResponseList.toResponse(pointTransactions);
     }

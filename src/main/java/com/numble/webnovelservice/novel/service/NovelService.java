@@ -2,7 +2,7 @@ package com.numble.webnovelservice.novel.service;
 
 import com.numble.webnovelservice.common.exception.WebNovelServiceException;
 import com.numble.webnovelservice.episode.entity.Episode;
-import com.numble.webnovelservice.episode.entity.OwnedEpisode;
+import com.numble.webnovelservice.ownedepisode.entity.OwnedEpisode;
 import com.numble.webnovelservice.episode.repository.EpisodeRepository;
 import com.numble.webnovelservice.member.entity.Member;
 import com.numble.webnovelservice.novel.dto.request.NovelRegisterRequest;
@@ -117,7 +117,7 @@ public class NovelService {
         return episodes.stream()
                 .map(episode -> episode.getOwnedEpisodes()
                         .stream()
-                        .filter(ownedEpisode -> ownedEpisode.getMember().equals(currentMember))
+                        .filter(ownedEpisode -> ownedEpisode.getMember().getId().equals(currentMember.getId()))
                         .findFirst()
                         .orElse(null))
                 .collect(Collectors.toList());

@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface TicketTransactionRepository extends JpaRepository<TicketTransaction, Long> {
 
-    List<TicketTransaction> findByMember(Member member);
+    List<TicketTransaction> findByMemberOrderByCreatedAtDesc(Member member);
 }

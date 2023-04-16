@@ -1,16 +1,16 @@
-package com.numble.webnovelservice.episode.service;
+package com.numble.webnovelservice.ownedepisode.service;
 
 import com.numble.webnovelservice.common.exception.WebNovelServiceException;
-import com.numble.webnovelservice.episode.dto.response.OwnedEpisodeInfoResponseList;
-import com.numble.webnovelservice.episode.dto.response.OwnedEpisodeReadResponse;
 import com.numble.webnovelservice.episode.entity.Episode;
-import com.numble.webnovelservice.episode.entity.OwnedEpisode;
 import com.numble.webnovelservice.episode.entity.PaymentType;
 import com.numble.webnovelservice.episode.repository.EpisodeRepository;
-import com.numble.webnovelservice.episode.repository.OwnedEpisodeRepository;
 import com.numble.webnovelservice.member.entity.Member;
 import com.numble.webnovelservice.member.repository.MemberRepository;
 import com.numble.webnovelservice.novel.entity.Novel;
+import com.numble.webnovelservice.ownedepisode.dto.response.OwnedEpisodeInfoResponseList;
+import com.numble.webnovelservice.ownedepisode.dto.response.OwnedEpisodeReadResponse;
+import com.numble.webnovelservice.ownedepisode.entity.OwnedEpisode;
+import com.numble.webnovelservice.ownedepisode.repository.OwnedEpisodeRepository;
 import com.numble.webnovelservice.transaction.entity.TicketTransaction;
 import com.numble.webnovelservice.transaction.repository.TicketTransactionRepository;
 import com.numble.webnovelservice.util.redis.repository.DailyBestRedisRepository;
@@ -29,6 +29,8 @@ import static com.numble.webnovelservice.common.exception.ErrorCode.NOT_AVAILABL
 import static com.numble.webnovelservice.common.exception.ErrorCode.NOT_FOUND_EPISODE;
 import static com.numble.webnovelservice.common.exception.ErrorCode.NOT_FOUND_MEMBER;
 import static com.numble.webnovelservice.common.exception.ErrorCode.NOT_FOUND_OWNED_EPISODE;
+import static com.numble.webnovelservice.common.exception.ErrorCode.NOT_READ_OWNED_EPISODE;
+import static com.numble.webnovelservice.common.exception.ErrorCode.PAGE_NUMBER_IS_NULL;
 import static com.numble.webnovelservice.common.exception.ErrorCode.PAGE_OUT_OF_BOUNDS;
 import static com.numble.webnovelservice.episode.entity.PaymentType.FREE;
 import static com.numble.webnovelservice.episode.entity.PaymentType.PAID;
@@ -74,7 +76,8 @@ public class OwnedEpisodeService {
             episode.addOwnedEpisode(ownedEpisode);
 
             ownedEpisodeRepository.save(ownedEpisode);
-            ticketTransactionRepository.save(ticketTransaction);
+
+            saveTicketTransactionIfEpisodeIsNotFree(episode.getIsFree(), ticketTransaction);
 
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -91,6 +94,12 @@ public class OwnedEpisodeService {
         }
     }
 
+    private void saveTicketTransactionIfEpisodeIsNotFree(boolean isFree, TicketTransaction ticketTransaction) {
+
+        if(!isFree) {
+            ticketTransactionRepository.save(ticketTransaction);
+        }
+    }
     private void throwIfDuplicateOwnedEpisode(Long memberId, Long episodeId) {
 
         if(ownedEpisodeRepository.existsByMemberIdAndEpisodeId(memberId, episodeId)){
@@ -112,7 +121,7 @@ public class OwnedEpisodeService {
         novel.increaseTotalViewCount();
 
         PaymentType payment = getEpisodePaymentType(episode.getIsFree());
-        dailyBestRedisRepository.increaseDailyView(novel.getTitle(), payment);
+        dailyBestRedisRepository.increaseDailyView(novel.getId().toString(), payment);
 
         return OwnedEpisodeReadResponse.toResponse(ownedEpisode);
     }
@@ -133,6 +142,9 @@ public class OwnedEpisodeService {
 
         Episode episode = ownedEpisode.getEpisode();
 
+        throwIfNotRead(ownedEpisode.getIsRead());
+        throwIfPageNumberIsNull(ownedEpisode.getCurrentReadingPage());
+
         int totalPage = episode.getTotalPageCount();
         int currentReadingPage = ownedEpisode.getCurrentReadingPage();
 
@@ -148,15 +160,29 @@ public class OwnedEpisodeService {
         }
     }
 
+    private void throwIfNotRead(Boolean isRead) {
+
+        if(!isRead){
+            throw new WebNovelServiceException(NOT_READ_OWNED_EPISODE);
+        }
+    }
+
+    private void throwIfPageNumberIsNull(Integer currentReadingPage) {
+
+        if(currentReadingPage == null){
+            throw new WebNovelServiceException(PAGE_NUMBER_IS_NULL);
+        }
+    }
+
     @Transactional
     public void readOwnedEpisodePreviousPage(Member currentMember, Long episodeId) {
 
         OwnedEpisode ownedEpisode = ownedEpisodeRepository.findByMemberIdAndEpisodeId(currentMember.getId(), episodeId).orElseThrow(
                 () -> new WebNovelServiceException(NOT_FOUND_OWNED_EPISODE));
 
-        int currentReadingPage = ownedEpisode.getCurrentReadingPage();
-
-        throwIfInvalidPageNumber(currentReadingPage);
+        throwIfNotRead(ownedEpisode.getIsRead());
+        throwIfPageNumberIsNull(ownedEpisode.getCurrentReadingPage());
+        throwIfInvalidPageNumber(ownedEpisode.getCurrentReadingPage());
 
         ownedEpisode.readPreviousPage();
     }

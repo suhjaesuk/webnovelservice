@@ -1,9 +1,9 @@
 package com.numble.webnovelservice.dailybest.controller;
 
 import com.numble.webnovelservice.common.response.ResponseMessage;
-import com.numble.webnovelservice.dailybest.dto.response.DailyBestNovelForFreeResponseList;
-import com.numble.webnovelservice.dailybest.dto.response.DailyBestNovelForPaidResponseList;
-import com.numble.webnovelservice.dailybest.dto.response.DailyBestNovelResponseList;
+import com.numble.webnovelservice.dailybest.dto.response.DailyBestNovelForFreeResponse;
+import com.numble.webnovelservice.dailybest.dto.response.DailyBestNovelForPaidResponse;
+import com.numble.webnovelservice.dailybest.dto.response.DailyBestNovelForAllPaymentTypeResponse;
 import com.numble.webnovelservice.dailybest.service.DailyBestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,24 +19,24 @@ public class DailyBestController {
 
     private final DailyBestService dailyBestService;
 
-    @GetMapping
-    public ResponseEntity<ResponseMessage<DailyBestNovelResponseList>> retrieveDailyBestNovelForAllPaymentType(){
+    @GetMapping("/all-types")
+    public ResponseEntity<ResponseMessage<DailyBestNovelForAllPaymentTypeResponse>> retrieveDailyBestNovelForAllPaymentType(){
 
-        DailyBestNovelResponseList response = dailyBestService.retrieveDailyBestNovelForAllPaymentType();
-        return new ResponseEntity<>(new ResponseMessage<>("일일 베스트 소설 조회 성공",response), HttpStatus.OK);
+        DailyBestNovelForAllPaymentTypeResponse response = dailyBestService.retrieveDailyBestNovelForAllPaymentType();
+        return new ResponseEntity<>(new ResponseMessage<>("전체 일일 베스트 소설 조회 성공",response), HttpStatus.OK);
     }
 
     @GetMapping("/paid")
-    public ResponseEntity<ResponseMessage<DailyBestNovelForPaidResponseList>> retrieveDailyBestNovelForPaid(){
+    public ResponseEntity<ResponseMessage<DailyBestNovelForPaidResponse>> retrieveDailyBestNovelForPaid(){
 
-        DailyBestNovelForPaidResponseList response = dailyBestService.retrieveDailyBestNovelForPaid();
+        DailyBestNovelForPaidResponse response = dailyBestService.retrieveDailyBestNovelForPaid();
         return new ResponseEntity<>(new ResponseMessage<>("유료 일일 베스트 소설 조회 성공",response), HttpStatus.OK);
     }
 
     @GetMapping("/free")
-    public ResponseEntity<ResponseMessage<DailyBestNovelForFreeResponseList>> retrieveDailyBestNovelForFree(){
+    public ResponseEntity<ResponseMessage<DailyBestNovelForFreeResponse>> retrieveDailyBestNovelForFree(){
 
-        DailyBestNovelForFreeResponseList response = dailyBestService.retrieveDailyBestNovelForFree();
+        DailyBestNovelForFreeResponse response = dailyBestService.retrieveDailyBestNovelForFree();
         return new ResponseEntity<>(new ResponseMessage<>("무료 일일 베스트 소설 조회 성공",response), HttpStatus.OK);
     }
 }

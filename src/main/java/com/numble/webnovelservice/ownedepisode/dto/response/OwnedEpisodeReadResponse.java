@@ -1,6 +1,6 @@
-package com.numble.webnovelservice.episode.dto.response;
+package com.numble.webnovelservice.ownedepisode.dto.response;
 
-import com.numble.webnovelservice.episode.entity.OwnedEpisode;
+import com.numble.webnovelservice.ownedepisode.entity.OwnedEpisode;
 import lombok.Builder;
 import lombok.Getter;
 

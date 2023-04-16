@@ -40,7 +40,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
         response.getWriter().println("{ \"message\" : \"" + errorCode.getMessage()
                 + "\", \"code\" : \"" +  errorCode.getCode()
-                + "\", \"status\" : " + errorCode.getHttpStatus()
-                + ", \"errors\" : [ ] }");
+                + "\", \"status\" : " + errorCode.getHttpStatus());
     }
 }

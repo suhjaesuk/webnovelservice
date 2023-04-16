@@ -2,6 +2,7 @@ package com.numble.webnovelservice.episode.entity;
 
 import com.numble.webnovelservice.episode.dto.request.EpisodeUpdateRequest;
 import com.numble.webnovelservice.novel.entity.Novel;
+import com.numble.webnovelservice.ownedepisode.entity.OwnedEpisode;
 import com.numble.webnovelservice.util.time.Timestamped;
 import lombok.AccessLevel;
 import lombok.Builder;

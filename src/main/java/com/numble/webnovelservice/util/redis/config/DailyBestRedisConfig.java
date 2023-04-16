@@ -22,9 +22,9 @@ public class DailyBestRedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, String> redisTemplate() {
+    public RedisTemplate<String, Object> redisTemplate() {
 
-        RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
 
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new StringRedisSerializer());

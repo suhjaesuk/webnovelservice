@@ -24,6 +24,7 @@ public class ResponseMessage<T> {
     private final T data;
 
     public ResponseMessage(String message, T data){
+
         this.message = message;
         this.data = data;
     }

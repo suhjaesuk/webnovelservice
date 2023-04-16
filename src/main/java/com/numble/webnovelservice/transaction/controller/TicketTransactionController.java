@@ -29,7 +29,7 @@ public class TicketTransactionController {
         return new ResponseEntity<>(new ResponseMessage<>("소장권 거래 기록 조회 성공", response), HttpStatus.OK);
     }
 
-    @PostMapping
+    @PostMapping("/deposit")
     public ResponseEntity<ResponseMessage<Void>> chargeTicket(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                              @RequestBody TicketTransactionChargeRequest request){
 

@@ -8,21 +8,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
-public class DailyBestNovelResponseList {
+public class DailyBestNovelForFreeResponse {
 
-    private List<NovelInfoResponse> dailyBests;
+    private List<NovelInfoResponse> DailyBestNovelsForFree;
 
-    public DailyBestNovelResponseList(List<NovelInfoResponse> dailyBests) {
-
-        this.dailyBests = dailyBests;
+    public DailyBestNovelForFreeResponse(List<NovelInfoResponse> DailyBestNovelsForFree) {
+        this.DailyBestNovelsForFree = DailyBestNovelsForFree;
     }
 
-    public static DailyBestNovelResponseList toResponse(List<Novel> novels) {
+    public static DailyBestNovelForFreeResponse toResponse(List<Novel> novels) {
 
         List<NovelInfoResponse> responseList = novels.stream()
                 .map(NovelInfoResponse::toResponse)
                 .collect(Collectors.toList());
 
-        return new DailyBestNovelResponseList(responseList);
+        return new DailyBestNovelForFreeResponse(responseList);
     }
 }

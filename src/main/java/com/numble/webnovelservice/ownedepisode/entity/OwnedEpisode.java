@@ -1,5 +1,6 @@
-package com.numble.webnovelservice.episode.entity;
+package com.numble.webnovelservice.ownedepisode.entity;
 
+import com.numble.webnovelservice.episode.entity.Episode;
 import com.numble.webnovelservice.member.entity.Member;
 import com.numble.webnovelservice.util.time.Timestamped;
 import lombok.AccessLevel;
@@ -70,11 +71,12 @@ public class OwnedEpisode extends Timestamped {
 
     public void readNextPage(){
 
-        currentReadingPage++;
+        this.currentReadingPage++;
+
     }
 
     public void readPreviousPage(){
 
-        currentReadingPage--;
+        this.currentReadingPage--;
     }
 }

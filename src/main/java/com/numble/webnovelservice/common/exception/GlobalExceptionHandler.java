@@ -19,7 +19,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = WebNovelServiceException.class)
     public ResponseEntity<?> handleWebNovelServiceException(WebNovelServiceException e){
 
-        logger.error("", e);
+        logger.error(e.getErrorCode().getMessage() + " : " + e.getErrorCode().getCode());
         HttpStatus status = e.getErrorCode().getHttpStatus();
         ErrorMessage error = new ErrorMessage(e.getErrorCode().getCode(), e.getErrorCode().getMessage());
 

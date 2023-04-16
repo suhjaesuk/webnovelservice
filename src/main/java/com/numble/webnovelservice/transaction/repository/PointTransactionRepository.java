@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface PointTransactionRepository extends JpaRepository<PointTransaction, Long> {
 
-    List<PointTransaction> findByMember(Member member);
+    List<PointTransaction> findByMemberOrderByCreatedAtDesc(Member member);
 }
