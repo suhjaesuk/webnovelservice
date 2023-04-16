@@ -43,9 +43,9 @@ public class DailyBestRedisRepository {
     }
 
     /**
-     * 일일 조회 베스트는 최대 10개 저장된다.
+     * 일일 조회 베스트의 novelId 는 최대 10개 저장된다.
      *
-     * @return List<String> titles = ["제일 많이 조회된 소설제목", "두번째로 많이 조회된 소설제목", ...., "열 번째로 많이 조회된 소설제목"]
+     * @return List<Long> titles = ["제일 많이 조회된 소설제목", "두번째로 많이 조회된 소설제목", ...., "열 번째로 많이 조회된 소설제목"]
      */
     public List<Long> getDailyBestsNovelTitleForAllPaymentType() {
 
