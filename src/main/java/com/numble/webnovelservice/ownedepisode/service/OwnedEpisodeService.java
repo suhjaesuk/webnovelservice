@@ -71,13 +71,13 @@ public class OwnedEpisodeService {
             member.consumeTicket(requiredTickets);
 
             OwnedEpisode ownedEpisode = OwnedEpisode.createOwnedEpisode(member, episode);
-            TicketTransaction ticketTransaction = TicketTransaction.createConsumeTicketTransaction(member, requiredTickets);
+            PaymentType paymentType = getEpisodePaymentType(episode.getIsFree());
+            TicketTransaction ticketTransaction = createConsumeTicketTransactionIfEpisodeIsPaid(member, requiredTickets, paymentType);
 
             episode.addOwnedEpisode(ownedEpisode);
 
             ownedEpisodeRepository.save(ownedEpisode);
-
-            saveTicketTransactionIfEpisodeIsNotFree(episode.getIsFree(), ticketTransaction);
+            saveTicketTransactionIfNotNull(ticketTransaction);
 
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
@@ -94,12 +94,21 @@ public class OwnedEpisodeService {
         }
     }
 
-    private void saveTicketTransactionIfEpisodeIsNotFree(boolean isFree, TicketTransaction ticketTransaction) {
+    private TicketTransaction createConsumeTicketTransactionIfEpisodeIsPaid(Member member, int requiredTickets, PaymentType paymentType) {
 
-        if(!isFree) {
+        if(paymentType == PAID) {
+            return TicketTransaction.createConsumeTicketTransaction(member, requiredTickets);
+        }
+        return null;
+    }
+
+    private void saveTicketTransactionIfNotNull(TicketTransaction ticketTransaction){
+
+        if(ticketTransaction != null){
             ticketTransactionRepository.save(ticketTransaction);
         }
     }
+
     private void throwIfDuplicateOwnedEpisode(Long memberId, Long episodeId) {
 
         if(ownedEpisodeRepository.existsByMemberIdAndEpisodeId(memberId, episodeId)){
@@ -189,7 +198,9 @@ public class OwnedEpisodeService {
 
     private void throwIfInvalidPageNumber(int currentReadingPage) {
 
-        if(currentReadingPage <= 1){
+        final int firstPage = 1;
+
+        if(currentReadingPage <= firstPage){
             throw new WebNovelServiceException(PAGE_OUT_OF_BOUNDS);
         }
     }
