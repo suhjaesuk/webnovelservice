@@ -38,7 +38,8 @@ public enum ErrorCode {
     NOT_FOUND_OWNED_EPISODE(HttpStatus.NOT_FOUND, "OWNED_EPISODE_001", "찾을 수 없는 소장 에피소드입니다."),
     PAGE_OUT_OF_BOUNDS(HttpStatus.BAD_REQUEST, "OWNED_EPISODE_002", "읽을 페이지가 페이지의 범위를 벗어났습니다."),
     DUPLICATE_OWNED_EPISODE(HttpStatus.BAD_REQUEST, "OWNED_EPISODE_003", "이미 등록된 소장 에피소드입니다."),
-
+    NOT_READ_OWNED_EPISODE(HttpStatus.BAD_REQUEST, "OWNED_EPISODE_004", "아직 읽음 처리 안된 에피소드입니다."),
+    PAGE_NUMBER_IS_NULL(HttpStatus.BAD_REQUEST, "OWNED_EPISODE_005", "페이지 값이 없습니다."),
     DUPLICATE_FAVORITE_NOVEL(HttpStatus.BAD_REQUEST, "FAVORITE_NOVEL_001", "이미 등록된 선호 소설입니다."),
     NOT_FOUND_FAVORITE_NOVEL(HttpStatus.NOT_FOUND, "FAVORITE_NOVEL_002", "찾을 수 없는 선호 소설입니다."),
 
