@@ -124,5 +124,3 @@ public class DailyBestRedisRepository {
         return dailyBestsForFree;
     }
 }
-
-
