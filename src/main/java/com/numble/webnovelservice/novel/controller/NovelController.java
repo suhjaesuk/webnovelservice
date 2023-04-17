@@ -48,14 +48,14 @@ public class NovelController {
         return new ResponseEntity<>(new ResponseMessage<>("소설 삭제 성공",null), HttpStatus.OK);
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<ResponseMessage<NovelInfoResponseList>> retrieveAllNovels(){
 
         NovelInfoResponseList response = novelService.retrieveAllNovels();
         return new ResponseEntity<>(new ResponseMessage<>("소설 전체 조회 성공", response), HttpStatus.OK);
     }
 
-    @GetMapping("/{genre}")
+    @GetMapping("/genre/{genre}")
     public ResponseEntity<ResponseMessage<NovelInfoResponseList>> retrieveNovelsByGenre(@PathVariable String genre){
 
         NovelInfoResponseList response = novelService.retrieveNovelsByGenre(genre);
