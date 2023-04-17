@@ -50,7 +50,7 @@ public class HomeExposureService {
 
         final int MAX_HOME_EXPOSURE_COUNT = 10;
 
-        if (novelRepository.count() >= MAX_HOME_EXPOSURE_COUNT) {
+        if (homeExposureRepository.count() >= MAX_HOME_EXPOSURE_COUNT) {
             throw new WebNovelServiceException(HOME_EXPOSURE_COUNT_OUT_OF_BOUNDS);
         }
     }
@@ -68,7 +68,7 @@ public class HomeExposureService {
     @Transactional(readOnly = true)
     public HomeExposureInfoResponseList retrieveAllHomeExposures() {
 
-        List<HomeExposure> homeExposures = homeExposureRepository.findAll();
+        List<HomeExposure> homeExposures = homeExposureRepository.findAllWithNovel();
 
         return HomeExposureInfoResponseList.toResponse(homeExposures);
     }
