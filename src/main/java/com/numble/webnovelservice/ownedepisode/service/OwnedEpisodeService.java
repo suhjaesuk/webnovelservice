@@ -119,7 +119,7 @@ public class OwnedEpisodeService {
     @Transactional
     public OwnedEpisodeReadResponse readOwnedEpisode(Member currentMember, Long episodeId) {
 
-        OwnedEpisode ownedEpisode = ownedEpisodeRepository.findByMemberIdAndEpisodeId(currentMember.getId(), episodeId).orElseThrow(
+        OwnedEpisode ownedEpisode = ownedEpisodeRepository.findByMemberIdAndEpisodeIdWithEpisodeAndNovel(currentMember.getId(), episodeId).orElseThrow(
                 () -> new WebNovelServiceException(NOT_FOUND_OWNED_EPISODE));
 
         Episode episode = ownedEpisode.getEpisode();
@@ -146,7 +146,7 @@ public class OwnedEpisodeService {
     @Transactional
     public void readOwnedEpisodeNextPage(Member currentMember, Long episodeId) {
 
-        OwnedEpisode ownedEpisode = ownedEpisodeRepository.findByMemberIdAndEpisodeId(currentMember.getId(), episodeId).orElseThrow(
+        OwnedEpisode ownedEpisode = ownedEpisodeRepository.findByMemberIdAndEpisodeIdWithEpisode(currentMember.getId(), episodeId).orElseThrow(
                 () -> new WebNovelServiceException(NOT_FOUND_OWNED_EPISODE));
 
         Episode episode = ownedEpisode.getEpisode();
@@ -186,7 +186,7 @@ public class OwnedEpisodeService {
     @Transactional
     public void readOwnedEpisodePreviousPage(Member currentMember, Long episodeId) {
 
-        OwnedEpisode ownedEpisode = ownedEpisodeRepository.findByMemberIdAndEpisodeId(currentMember.getId(), episodeId).orElseThrow(
+        OwnedEpisode ownedEpisode = ownedEpisodeRepository.findByMemberIdAndEpisodeIdWithEpisode(currentMember.getId(), episodeId).orElseThrow(
                 () -> new WebNovelServiceException(NOT_FOUND_OWNED_EPISODE));
 
         throwIfNotRead(ownedEpisode.getIsRead());
@@ -208,7 +208,7 @@ public class OwnedEpisodeService {
     @Transactional(readOnly = true)
     public OwnedEpisodeInfoResponseList retrieveOwnedEpisodesByMember(Member currentMember) {
 
-        List<OwnedEpisode> ownedEpisodes =  ownedEpisodeRepository.findByMemberId(currentMember.getId());
+        List<OwnedEpisode> ownedEpisodes =  ownedEpisodeRepository.findByMemberIdWithEpisodeAndNovel(currentMember.getId());
 
         return OwnedEpisodeInfoResponseList.toResponse(ownedEpisodes);
     }
