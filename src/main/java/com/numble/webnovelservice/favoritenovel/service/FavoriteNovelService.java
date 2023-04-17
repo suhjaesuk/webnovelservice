@@ -30,11 +30,9 @@ public class FavoriteNovelService {
         throwIfDuplicateFavoriteNovel(currentMember.getId(), novelId);
 
         Novel novel = novelRepository.findById(novelId).orElseThrow(
-                () -> new WebNovelServiceException(NOT_FOUND_NOVEL)
-        );
+                () -> new WebNovelServiceException(NOT_FOUND_NOVEL));
 
         FavoriteNovel favoriteNovel = FavoriteNovel.createFavoriteNovel(currentMember, novel);
-
         novel.increaseLikeCount();
 
         favoriteNovelRepository.save(favoriteNovel);
@@ -50,13 +48,10 @@ public class FavoriteNovelService {
     @Transactional
     public void removeFavoriteNovel(Member currentMember, Long novelId) {
 
-        FavoriteNovel favoriteNovel = favoriteNovelRepository.
-                findByMemberIdAndNovelId(currentMember.getId(), novelId).orElseThrow(
-                        ()-> new WebNovelServiceException(NOT_FOUND_FAVORITE_NOVEL)
-        );
+        FavoriteNovel favoriteNovel = favoriteNovelRepository.findByMemberIdAndNovelIdWithNovel(currentMember.getId(), novelId).orElseThrow(
+                        ()-> new WebNovelServiceException(NOT_FOUND_FAVORITE_NOVEL));
 
         Novel novel = favoriteNovel.getNovel();
-
         novel.decreaseLikeCount();
 
         favoriteNovelRepository.delete(favoriteNovel);
@@ -65,7 +60,7 @@ public class FavoriteNovelService {
     @Transactional(readOnly = true)
     public FavoriteNovelInfoResponseList retrieveFavoriteNovelsByMember(Member currentMember){
 
-        List<FavoriteNovel> favoriteNovels = favoriteNovelRepository.findByMemberId(currentMember.getId());
+        List<FavoriteNovel> favoriteNovels = favoriteNovelRepository.findByMemberIdWithNovel(currentMember.getId());
 
         return FavoriteNovelInfoResponseList.toResponse(favoriteNovels);
     }
