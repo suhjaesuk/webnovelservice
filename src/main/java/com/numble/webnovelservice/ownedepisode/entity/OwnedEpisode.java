@@ -44,7 +44,6 @@ public class OwnedEpisode extends Timestamped {
 
     @Builder
     public OwnedEpisode(Long id, Integer currentReadingPage, Boolean isRead, Member member, Episode episode) {
-
         this.id = id;
         this.currentReadingPage = currentReadingPage;
         this.isRead = isRead;
@@ -53,7 +52,6 @@ public class OwnedEpisode extends Timestamped {
     }
 
     public static OwnedEpisode createOwnedEpisode(Member member, Episode episode) {
-
         return OwnedEpisode.builder()
                 .isRead(false)
                 .currentReadingPage(null)
@@ -62,21 +60,18 @@ public class OwnedEpisode extends Timestamped {
                 .build();
     }
 
-    public void markAsRead(){
-
+    public void markAsRead() {
         this.isRead = true;
         this.currentReadingPage = Optional.ofNullable(currentReadingPage)
                                     .orElse(1);
     }
 
-    public void readNextPage(){
-
+    public void readNextPage() {
         this.currentReadingPage++;
 
     }
 
-    public void readPreviousPage(){
-
+    public void readPreviousPage() {
         this.currentReadingPage--;
     }
 }
