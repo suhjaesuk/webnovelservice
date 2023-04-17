@@ -38,6 +38,15 @@ public class WebSecurityConfig {
 
         http.authorizeRequests().
                 antMatchers("/api/auth/**").permitAll().
+                antMatchers("/api/novels/all").permitAll().
+                antMatchers("/api/novels/**/details").permitAll().
+                antMatchers("/api/novels/latest").permitAll().
+                antMatchers("/api/novels/genre/**").permitAll().
+                antMatchers("/api/novels/search/**").permitAll().
+                antMatchers("/api/daily-bests/all-types").permitAll().
+                antMatchers("/api/daily-bests/paid").permitAll().
+                antMatchers("/api/daily-bests/free").permitAll().
+                antMatchers("/api/home-exposures").permitAll().
                 anyRequest().authenticated().
                 and().
                 addFilterBefore(new JwtAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class).
