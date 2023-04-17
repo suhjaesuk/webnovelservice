@@ -92,9 +92,8 @@ public class NovelService {
 
         Novel novel = findNovelById(novelId);
 
-        List<Episode> episodes= episodeRepository.findByNovelId(novelId).orElseThrow(
-                () -> new WebNovelServiceException(NOT_FOUND_EPISODE)
-        );
+        List<Episode> episodes= episodeRepository.findByNovelIdWithOwnedEpisodes(novelId).orElseThrow(
+                () -> new WebNovelServiceException(NOT_FOUND_EPISODE));
 
         List<OwnedEpisode> currentMemberOwnedNovelEpisodes = getCurrentMemberOwnedNovelEpisodes(currentMember, episodes);
 
