@@ -27,7 +27,6 @@ import static com.numble.webnovelservice.common.exception.ErrorCode.DUPLICATE_OW
 import static com.numble.webnovelservice.common.exception.ErrorCode.INSUFFICIENT_TICKET;
 import static com.numble.webnovelservice.common.exception.ErrorCode.NOT_AVAILABLE_LOCK;
 import static com.numble.webnovelservice.common.exception.ErrorCode.NOT_FOUND_EPISODE;
-import static com.numble.webnovelservice.common.exception.ErrorCode.NOT_FOUND_MEMBER;
 import static com.numble.webnovelservice.common.exception.ErrorCode.NOT_FOUND_OWNED_EPISODE;
 import static com.numble.webnovelservice.common.exception.ErrorCode.NOT_READ_OWNED_EPISODE;
 import static com.numble.webnovelservice.common.exception.ErrorCode.PAGE_NUMBER_IS_NULL;
@@ -59,20 +58,18 @@ public class OwnedEpisodeService {
 
             throwIfDuplicateOwnedEpisode(currentMember.getId(), episodeId);
 
-            Member member = memberRepository.findById(currentMember.getId()).orElseThrow(
-                    () -> new WebNovelServiceException(NOT_FOUND_MEMBER));
             Episode episode = episodeRepository.findById(episodeId).orElseThrow(
                     () -> new WebNovelServiceException(NOT_FOUND_EPISODE));
 
-            int availableTickets = member.getTicketCount();
+            int availableTickets = currentMember.getTicketCount();
             int requiredTickets = episode.getNeededTicketCount();
 
             throwIfInsufficientTicket(availableTickets, requiredTickets);
-            member.consumeTicket(requiredTickets);
+            currentMember.consumeTicket(requiredTickets);
 
-            OwnedEpisode ownedEpisode = OwnedEpisode.createOwnedEpisode(member, episode);
+            OwnedEpisode ownedEpisode = OwnedEpisode.createOwnedEpisode(currentMember, episode);
             PaymentType paymentType = getEpisodePaymentType(episode.getIsFree());
-            TicketTransaction ticketTransaction = createConsumeTicketTransactionIfEpisodeIsPaid(member, requiredTickets, paymentType);
+            TicketTransaction ticketTransaction = createConsumeTicketTransactionIfEpisodeIsPaid(currentMember, requiredTickets, paymentType);
 
             episode.addOwnedEpisode(ownedEpisode);
 
