@@ -12,10 +12,11 @@ import com.numble.webnovelservice.transaction.repository.TicketTransactionReposi
 import lombok.RequiredArgsConstructor;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static com.numble.webnovelservice.common.exception.ErrorCode.INSUFFICIENT_POINT;
@@ -32,9 +33,10 @@ public class TicketTransactionService {
     private final RedissonClient redissonClient;
 
     @Transactional(readOnly = true)
-    public TicketTransactionInfoResponseList retrieveCurrentMemberTicketTransactions(Member currentMember) {
+    public TicketTransactionInfoResponseList retrieveCurrentMemberTicketTransactions(Member currentMember, int page) {
 
-        List<TicketTransaction> ticketTransactions = ticketTransactionRepository.findByMemberOrderByCreatedAtDesc(currentMember);
+        PageRequest pageRequest = PageRequest.of(page, 20);
+        Slice<TicketTransaction> ticketTransactions = ticketTransactionRepository.findByMemberOrderByCreatedAtDesc(currentMember, pageRequest);
 
         return TicketTransactionInfoResponseList.toResponse(ticketTransactions);
     }

@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,10 +23,10 @@ public class TicketTransactionController {
 
     private final TicketTransactionService ticketTransactionService;
 
-    @GetMapping
-    public ResponseEntity<ResponseMessage<TicketTransactionInfoResponseList>> retrieveCurrentMemberTicketTransactions(@AuthenticationPrincipal UserDetailsImpl userDetails){
+    @GetMapping("/page/{page}")
+    public ResponseEntity<ResponseMessage<TicketTransactionInfoResponseList>> retrieveCurrentMemberTicketTransactions(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable int page){
 
-        TicketTransactionInfoResponseList response = ticketTransactionService.retrieveCurrentMemberTicketTransactions(userDetails.getMember());
+        TicketTransactionInfoResponseList response = ticketTransactionService.retrieveCurrentMemberTicketTransactions(userDetails.getMember(), page);
         return new ResponseEntity<>(new ResponseMessage<>("소장권 거래 기록 조회 성공", response), HttpStatus.OK);
     }
 
