@@ -13,7 +13,7 @@ DB 부하 감소를 위하여 휘발성이 짙은 데이터는 캐싱을 이용�
 
 
 ### 👨‍💻Pull Request
-- [32개의 PR 확인하기](https://github.com/suhjaesuk/webnovelservice/pulls?q=is%3Apr+is%3Aclosed)
+- [31개의 PR 확인하기](https://github.com/suhjaesuk/webnovelservice/pulls?q=is%3Apr+is%3Aclosed)
 ### 📜API
 - [API 확인하기](https://jade97.notion.site/API-4bd0995de6a84a49a63dc625ed69dbdd)
 
