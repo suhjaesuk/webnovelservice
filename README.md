@@ -42,5 +42,5 @@ DB 부하 감소를 위하여 휘발성이 짙은 데이터는 캐싱을 이용�
 
 
  - 추가 질문거리
-    - Lettuce vs Jedis. 사용 근거는 어떻게 될까요 ? [동시성에 대한 고민](https://github.com/suhjaesuk/webnovelservice/pull/31)
+    - Lettuce vs Jedis. 사용 근거는 어떻게 될까요 ? -> [동시성에 대한 고민](https://github.com/suhjaesuk/webnovelservice/pull/31)
     - 레디스는 운영에서 사용될때 이중화/클러스터링 되어 사용됩니다. 이 때 드라이버 라이브러리의 기능도 약간의 제한이 생기는데, 다음 기회에는 클러스터도 구성해보셔서 테스트해보시면 좋을 것 같습니다.
