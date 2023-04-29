@@ -33,7 +33,7 @@ import static com.numble.webnovelservice.common.exception.ErrorCode.PAGE_NUMBER_
 import static com.numble.webnovelservice.common.exception.ErrorCode.PAGE_OUT_OF_BOUNDS;
 import static com.numble.webnovelservice.episode.entity.PaymentType.FREE;
 import static com.numble.webnovelservice.episode.entity.PaymentType.PAID;
-import static com.numble.webnovelservice.util.redis.repository.DailyBestRedisRepository.LOCK_NAME;
+import static com.numble.webnovelservice.util.redis.config.LockRedisConfig.LOCK_NAME;
 
 
 @Service
