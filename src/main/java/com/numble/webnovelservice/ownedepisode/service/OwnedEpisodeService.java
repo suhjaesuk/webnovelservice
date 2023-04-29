@@ -5,7 +5,6 @@ import com.numble.webnovelservice.episode.entity.Episode;
 import com.numble.webnovelservice.episode.entity.PaymentType;
 import com.numble.webnovelservice.episode.repository.EpisodeRepository;
 import com.numble.webnovelservice.member.entity.Member;
-import com.numble.webnovelservice.member.repository.MemberRepository;
 import com.numble.webnovelservice.novel.entity.Novel;
 import com.numble.webnovelservice.ownedepisode.dto.response.OwnedEpisodeInfoResponseList;
 import com.numble.webnovelservice.ownedepisode.dto.response.OwnedEpisodeReadResponse;
@@ -69,7 +68,7 @@ public class OwnedEpisodeService {
 
             OwnedEpisode ownedEpisode = OwnedEpisode.createOwnedEpisode(currentMember, episode);
             PaymentType paymentType = getEpisodePaymentType(episode.getIsFree());
-            TicketTransaction ticketTransaction = createConsumeTicketTransactionIfEpisodeIsPaid(currentMember, requiredTickets, paymentType);
+            TicketTransaction ticketTransaction = createConsumeTicketTransactionIfEpisodeIsPaid(currentMember, requiredTickets, paymentType, episode);
 
             episode.addOwnedEpisode(ownedEpisode);
 
@@ -91,10 +90,10 @@ public class OwnedEpisodeService {
         }
     }
 
-    private TicketTransaction createConsumeTicketTransactionIfEpisodeIsPaid(Member member, int requiredTickets, PaymentType paymentType) {
+    private TicketTransaction createConsumeTicketTransactionIfEpisodeIsPaid(Member member, int requiredTickets, PaymentType paymentType, Episode episode) {
 
         if(paymentType == PAID) {
-            return TicketTransaction.createConsumeTicketTransaction(member, requiredTickets);
+            return TicketTransaction.createConsumeTicketTransaction(member, requiredTickets, episode);
         }
         return null;
     }
