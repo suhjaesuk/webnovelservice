@@ -47,6 +47,7 @@ public class WebSecurityConfig {
                 antMatchers("/api/daily-bests/paid").permitAll().
                 antMatchers("/api/daily-bests/free").permitAll().
                 antMatchers("/api/home-exposures").permitAll().
+                antMatchers("/api/point-transactions/deposit").permitAll().
                 anyRequest().authenticated().
                 and().
                 addFilterBefore(new JwtAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class).

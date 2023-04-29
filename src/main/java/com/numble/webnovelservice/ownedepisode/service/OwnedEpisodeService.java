@@ -41,7 +41,6 @@ public class OwnedEpisodeService {
 
     private final OwnedEpisodeRepository ownedEpisodeRepository;
     private final EpisodeRepository episodeRepository;
-    private final MemberRepository memberRepository;
     private final TicketTransactionRepository ticketTransactionRepository;
     private final RedissonClient redissonClient;
     private final DailyBestRedisRepository dailyBestRedisRepository;
