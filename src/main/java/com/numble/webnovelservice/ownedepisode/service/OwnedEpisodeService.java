@@ -70,7 +70,7 @@ public class OwnedEpisodeService {
 
             OwnedEpisode ownedEpisode = OwnedEpisode.createOwnedEpisode(currentMember, episode);
             PaymentType paymentType = getEpisodePaymentType(episode.getIsFree());
-            TicketTransaction ticketTransaction = createConsumeTicketTransactionIfEpisodeIsPaid(currentMember, requiredTickets, paymentType);
+            TicketTransaction ticketTransaction = createConsumeTicketTransactionIfEpisodeIsPaid(currentMember, requiredTickets, paymentType, episode);
 
             episode.addOwnedEpisode(ownedEpisode);
 
@@ -92,10 +92,10 @@ public class OwnedEpisodeService {
         }
     }
 
-    private TicketTransaction createConsumeTicketTransactionIfEpisodeIsPaid(Member member, int requiredTickets, PaymentType paymentType) {
+    private TicketTransaction createConsumeTicketTransactionIfEpisodeIsPaid(Member member, int requiredTickets, PaymentType paymentType, Episode episode) {
 
         if(paymentType == PAID) {
-            return TicketTransaction.createConsumeTicketTransaction(member, requiredTickets);
+            return TicketTransaction.createConsumeTicketTransaction(member, requiredTickets, episode);
         }
         return null;
     }
