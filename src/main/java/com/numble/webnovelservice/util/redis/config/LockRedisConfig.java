@@ -13,6 +13,7 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 public class LockRedisConfig {
     @Value("${spring.redisson.address}")
     private String address;
+    public static final String LOCK_NAME = "memberId : ";
 
     @Bean(destroyMethod = "shutdown")
     public RedissonClient redisson() {

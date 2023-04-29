@@ -22,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 import static com.numble.webnovelservice.common.exception.ErrorCode.INSUFFICIENT_POINT;
 import static com.numble.webnovelservice.common.exception.ErrorCode.NOT_AVAILABLE_LOCK;
 import static com.numble.webnovelservice.common.exception.ErrorCode.NOT_FOUND_MEMBER;
+import static com.numble.webnovelservice.util.redis.config.LockRedisConfig.LOCK_NAME;
 
 @Service
 @RequiredArgsConstructor
@@ -44,7 +45,7 @@ public class TicketTransactionService {
     @Transactional
     public void chargeTicket(Member currentMember, TicketTransactionChargeRequest request) {
 
-        String lockName = "charge-ticket"+ " / " + "username: " + currentMember.getUsername();
+        String lockName = LOCK_NAME + currentMember.getId();
         RLock lock = redissonClient.getLock(lockName);
 
         try {
