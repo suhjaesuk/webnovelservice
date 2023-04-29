@@ -5,8 +5,8 @@ import com.numble.webnovelservice.episode.entity.Episode;
 import com.numble.webnovelservice.episode.entity.PaymentType;
 import com.numble.webnovelservice.episode.repository.EpisodeRepository;
 import com.numble.webnovelservice.member.entity.Member;
-import com.numble.webnovelservice.member.repository.MemberRepository;
 import com.numble.webnovelservice.novel.entity.Novel;
+import com.numble.webnovelservice.novel.repository.NovelRepository;
 import com.numble.webnovelservice.ownedepisode.dto.response.OwnedEpisodeInfoResponseList;
 import com.numble.webnovelservice.ownedepisode.dto.response.OwnedEpisodeReadResponse;
 import com.numble.webnovelservice.ownedepisode.entity.OwnedEpisode;
@@ -45,6 +45,7 @@ public class OwnedEpisodeService {
     private final TicketTransactionRepository ticketTransactionRepository;
     private final RedissonClient redissonClient;
     private final DailyBestRedisRepository dailyBestRedisRepository;
+    private final NovelRepository novelRepository;
 
     @Transactional
     public void purchaseEpisode(Member currentMember, Long episodeId) {
@@ -123,8 +124,8 @@ public class OwnedEpisodeService {
         Novel novel = episode.getNovel();
 
         ownedEpisode.markAsRead();
-        episode.increaseViewCount();
-        novel.increaseTotalViewCount();
+        episodeRepository.increaseViewCountAtomically(episode.getId());
+        novelRepository.increaseTotalViewCountAtomically(novel.getId());
 
         PaymentType payment = getEpisodePaymentType(episode.getIsFree());
         dailyBestRedisRepository.increaseDailyView(novel.getId().toString(), payment);

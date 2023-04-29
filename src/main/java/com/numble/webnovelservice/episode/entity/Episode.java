@@ -85,11 +85,6 @@ public class Episode extends Timestamped {
         this.fileSize = request.getFileSize();
     }
 
-    public void increaseViewCount(){
-
-        this.viewCount++;
-    }
-
     public void addOwnedEpisode(OwnedEpisode ownedEpisode){
 
         ownedEpisodes.add(ownedEpisode);
