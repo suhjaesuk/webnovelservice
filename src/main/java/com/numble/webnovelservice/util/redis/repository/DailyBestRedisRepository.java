@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 public class DailyBestRedisRepository {
 
     private final RedisTemplate<String, String> redisTemplate;
+    public static final String LOCK_NAME = "memberId : ";
 
     /**
      * @param novelId(Key)   소설의 제목

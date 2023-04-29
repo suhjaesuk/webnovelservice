@@ -33,6 +33,7 @@ import static com.numble.webnovelservice.common.exception.ErrorCode.PAGE_NUMBER_
 import static com.numble.webnovelservice.common.exception.ErrorCode.PAGE_OUT_OF_BOUNDS;
 import static com.numble.webnovelservice.episode.entity.PaymentType.FREE;
 import static com.numble.webnovelservice.episode.entity.PaymentType.PAID;
+import static com.numble.webnovelservice.util.redis.repository.DailyBestRedisRepository.LOCK_NAME;
 
 
 @Service
@@ -49,7 +50,7 @@ public class OwnedEpisodeService {
     @Transactional
     public void purchaseEpisode(Member currentMember, Long episodeId) {
 
-        String lockName = "purchase-episode" + " / " + "username: " + currentMember.getUsername() + " / " + "episodeId: " + episodeId;
+        String lockName = LOCK_NAME + currentMember.getId();
         RLock lock = redissonClient.getLock(lockName);
 
         try {
